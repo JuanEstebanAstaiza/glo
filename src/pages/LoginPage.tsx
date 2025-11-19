@@ -33,17 +33,28 @@ export function LoginPage() {
       password: '',
     },
   });
-  const handleLogin = () => {
-    toast.success(`Logged in as ${selectedRole}! Redirecting...`);
-    loginAction(selectedRole);
-    // The Root component will handle redirection based on role
+  const handleLogin = (role: UserRole) => {
+    toast.success(`Logged in as ${role}! Redirecting...`);
+    loginAction(role);
     setTimeout(() => {
-      navigate('/');
+      switch (role) {
+        case 'manicurist':
+          navigate('/dashboard');
+          break;
+        case 'client':
+          navigate('/client-dashboard');
+          break;
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        default:
+          navigate('/');
+      }
     }, 1000);
   };
   const onSubmit = (values: LoginFormValues) => {
     console.log('Login attempt with:', values, 'as', selectedRole);
-    handleLogin();
+    handleLogin(selectedRole);
   };
   return (
     <div className="min-h-screen bg-brand-cream flex items-center justify-center p-4">
@@ -128,7 +139,7 @@ export function LoginPage() {
               </span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleLogin}>
+          <Button variant="outline" className="w-full" onClick={() => handleLogin(selectedRole)}>
             <GoogleIcon className="mr-2 h-4 w-4" />
             Sign in with Google
           </Button>

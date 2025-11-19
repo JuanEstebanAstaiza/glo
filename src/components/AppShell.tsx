@@ -25,6 +25,7 @@ import { GloLogo } from "./GloLogo";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuthStore } from "@/stores/authStore";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 const manicuristNavItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/services", icon: Scissors, label: "Services" },
@@ -101,7 +102,8 @@ export function AppShell() {
         <GloLogo className="h-7 w-7 text-brand-rose" />
         <span className="text-xl font-bold text-brand-charcoal tracking-tight">Glo</span>
       </div>
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-2">
+        <LanguageSwitcher />
         <UserMenu />
       </div>
     </>
@@ -136,7 +138,8 @@ export function AppShell() {
       </div>
       <div className="flex flex-col bg-stone-50">
         <header className="flex h-16 items-center gap-4 border-b bg-brand-cream px-6">
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <LanguageSwitcher />
             <UserMenu />
           </div>
         </header>
