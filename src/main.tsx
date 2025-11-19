@@ -1,7 +1,7 @@
 import '@/lib/errorReporter';
 import { enableMapSet } from "immer";
 enableMapSet();
-import { StrictMode } from 'react'
+import React, { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import {
   createBrowserRouter,
@@ -11,6 +11,7 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RouteErrorBoundary } from '@/components/RouteErrorBoundary';
+import '@/i18n'; // Initialize i18n
 import '@/index.css'
 import { HomePage } from '@/pages/HomePage'
 import { AppShell } from '@/components/AppShell';
@@ -24,6 +25,7 @@ import { ClientsPage } from '@/pages/ClientsPage';
 import { AdminShell } from '@/components/AdminShell';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { AdminManicuristsPage } from '@/pages/admin/AdminManicuristsPage';
+import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -57,7 +59,7 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
       { path: "dashboard", element: <AdminDashboardPage /> },
       { path: "manicurists", element: <AdminManicuristsPage /> },
-      { path: "settings", element: <div>Admin Settings Page</div> },
+      { path: "settings", element: <AdminSettingsPage /> },
     ]
   },
   {
@@ -68,10 +70,12 @@ const router = createBrowserRouter([
 // Do not touch this code
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <Suspense fallback={<div>Loading...</div>}>
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </Suspense>
   </StrictMode>,
 )

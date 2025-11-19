@@ -1,148 +1,168 @@
-// Home page of the app, Currently a demo page for demonstration.
-// Please rewrite this file to implement your own logic. Do not replace or delete it, simply rewrite this HomePage.tsx file.
-import { useEffect } from 'react'
-import { Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { Toaster, toast } from '@/components/ui/sonner'
-import { create } from 'zustand'
-import { useShallow } from 'zustand/react/shallow'
-import { AppLayout } from '@/components/layout/AppLayout'
-
-// Timer store: independent slice with a clear, minimal API, for demonstration
-type TimerState = {
-  isRunning: boolean;
-  elapsedMs: number;
-  start: () => void;
-  pause: () => void;
-  reset: () => void;
-  tick: (deltaMs: number) => void;
-}
-
-const useTimerStore = create<TimerState>((set) => ({
-  isRunning: false,
-  elapsedMs: 0,
-  start: () => set({ isRunning: true }),
-  pause: () => set({ isRunning: false }),
-  reset: () => set({ elapsedMs: 0, isRunning: false }),
-  tick: (deltaMs) => set((s) => ({ elapsedMs: s.elapsedMs + deltaMs })),
-}))
-
-// Counter store: separate slice to showcase multiple stores without coupling
-type CounterState = {
-  count: number;
-  inc: () => void;
-  reset: () => void;
-}
-
-const useCounterStore = create<CounterState>((set) => ({
-  count: 0,
-  inc: () => set((s) => ({ count: s.count + 1 })),
-  reset: () => set({ count: 0 }),
-}))
-
-function formatDuration(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000))
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
-}
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Check, Scissors, Calendar, Gift } from 'lucide-react';
+import { GloLogo } from '@/components/GloLogo';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+const featureVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.2,
+      duration: 0.5,
+    },
+  }),
+};
 export function HomePage() {
-  // Select only what is needed to avoid unnecessary re-renders
-  const { isRunning, elapsedMs } = useTimerStore(
-    useShallow((s) => ({ isRunning: s.isRunning, elapsedMs: s.elapsedMs })),
-  )
-  const start = useTimerStore((s) => s.start)
-  const pause = useTimerStore((s) => s.pause)
-  const resetTimer = useTimerStore((s) => s.reset)
-  const count = useCounterStore((s) => s.count)
-  const inc = useCounterStore((s) => s.inc)
-  const resetCount = useCounterStore((s) => s.reset)
-
-  // Drive the timer only while running; avoid update-depth issues with a scoped RAF
-  useEffect(() => {
-    if (!isRunning) return
-    let raf = 0
-    let last = performance.now()
-    const loop = () => {
-      const now = performance.now()
-      const delta = now - last
-      last = now
-      // Read store API directly to keep effect deps minimal and stable
-      useTimerStore.getState().tick(delta)
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
-  }, [isRunning])
-
-  const onPleaseWait = () => {
-    inc()
-    if (!isRunning) {
-      start()
-      toast.success('Building your app…', {
-        description: 'Hang tight, we\'re setting everything up.',
-      })
-    } else {
-      pause()
-      toast.info('Taking a short pause', {
-        description: 'We\'ll continue shortly.',
-      })
-    }
-  }
-
-  const formatted = formatDuration(elapsedMs)
-
+  const { t } = useTranslation();
+  const features = [
+    {
+      icon: <Scissors className="h-8 w-8 text-brand-rose" />,
+      title: t('landing.features.list.services.title'),
+      description: t('landing.features.list.services.description'),
+    },
+    {
+      icon: <Calendar className="h-8 w-8 text-brand-rose" />,
+      title: t('landing.features.list.scheduling.title'),
+      description: t('landing.features.list.scheduling.description'),
+    },
+    {
+      icon: <Gift className="h-8 w-8 text-brand-rose" />,
+      title: t('landing.features.list.loyalty.title'),
+      description: t('landing.features.list.loyalty.description'),
+    },
+  ];
   return (
-    <AppLayout>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4 overflow-hidden relative">
-        <ThemeToggle />
-        <div className="absolute inset-0 bg-gradient-rainbow opacity-10 dark:opacity-20 pointer-events-none" />
-        <div className="text-center space-y-8 relative z-10 animate-fade-in">
-          <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-primary floating">
-              <Sparkles className="w-8 h-8 text-white rotating" />
+    <div className="min-h-screen bg-brand-cream text-brand-charcoal font-sans">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-brand-cream/80 backdrop-blur-lg border-b border-brand-charcoal/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            <Link to="/" className="flex items-center gap-2">
+              <GloLogo className="h-8 w-8 text-brand-rose" />
+              <span className="text-2xl font-bold tracking-tight">Glo</span>
+            </Link>
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="font-medium hover:text-brand-rose transition-colors">{t('landing.nav.features')}</a>
+              <a href="#pricing" className="font-medium hover:text-brand-rose transition-colors">{t('landing.nav.pricing')}</a>
+            </nav>
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <Button variant="ghost" asChild>
+                <Link to="/dashboard">{t('landing.nav.login')}</Link>
+              </Button>
+              <Button className="bg-brand-charcoal hover:bg-brand-charcoal/90 text-white" asChild>
+                <Link to="/dashboard">{t('landing.nav.getStarted')}</Link>
+              </Button>
             </div>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-balance leading-tight">
-            Creating your <span className="text-gradient">app</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto text-pretty">
-            Your application would be ready soon.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button 
-              size="lg"
-              onClick={onPleaseWait}
-              className="btn-gradient px-8 py-4 text-lg font-semibold hover:-translate-y-0.5 transition-all duration-200"
-              aria-live="polite"
-            >
-              Please Wait
-            </Button>
-          </div>
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-            <div>
-              Time elapsed: <span className="font-medium tabular-nums text-foreground">{formatted}</span>
-            </div>
-            <div>
-              Coins: <span className="font-medium tabular-nums text-foreground">{count}</span>
-            </div>
-          </div>
-          <div className="flex justify-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { resetTimer(); resetCount(); toast('Reset complete') }}>
-              Reset
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => { inc(); toast('Coin added') }}>
-              Add Coin
-            </Button>
           </div>
         </div>
-        <footer className="absolute bottom-8 text-center text-muted-foreground/80">
-          <p>Powered by Cloudflare</p>
-        </footer>
-        <Toaster richColors closeButton />
-      </div>
-    </AppLayout>
-  )
+      </header>
+      {/* Hero Section */}
+      <main>
+        <section className="py-24 md:py-32 lg:py-40 text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl md:text-6xl font-bold tracking-tighter mb-6"
+            >
+              {t('landing.hero.title')}
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="max-w-2xl mx-auto text-lg md:text-xl text-brand-charcoal/70 mb-8"
+            >
+              {t('landing.hero.subtitle')}
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Button size="lg" className="bg-brand-rose hover:bg-brand-rose/90 text-brand-charcoal text-lg px-8 py-6" asChild>
+                <Link to="/dashboard">{t('landing.hero.cta')}</Link>
+              </Button>
+            </motion.div>
+          </div>
+        </section>
+        {/* Features Section */}
+        <section id="features" className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold">{t('landing.features.title')}</h2>
+              <p className="mt-4 max-w-2xl mx-auto text-lg text-brand-charcoal/70">{t('landing.features.subtitle')}</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {features.map((feature, i) => (
+                <motion.div key={feature.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={featureVariants}>
+                  <Card className="text-center h-full shadow-sm hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="mx-auto bg-brand-rose/10 p-4 rounded-full w-fit mb-4">
+                        {feature.icon}
+                      </div>
+                      <CardTitle>{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-brand-charcoal/70">{feature.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+        {/* Pricing Section */}
+        <section id="pricing" className="py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold">{t('landing.pricing.title')}</h2>
+              <p className="mt-4 max-w-2xl mx-auto text-lg text-brand-charcoal/70">{t('landing.pricing.subtitle')}</p>
+            </div>
+            <div className="flex justify-center">
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+                <Card className="w-full max-w-sm shadow-lg border-2 border-brand-rose">
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-2xl">{t('landing.pricing.plans.solo.title')}</CardTitle>
+                    <p className="text-4xl font-bold pt-4">
+                      {t('landing.pricing.plans.solo.price')}
+                      <span className="text-lg font-normal text-brand-charcoal/70">{t('landing.pricing.plans.solo.period')}</span>
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ul className="space-y-3">
+                      {(t('landing.pricing.plans.solo.features', { returnObjects: true }) as string[]).map((item: string) => (
+                        <li key={item} className="flex items-center">
+                          <Check className="h-5 w-5 text-green-500 mr-2" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button className="w-full bg-brand-charcoal hover:bg-brand-charcoal/90 text-white" asChild>
+                      <Link to="/dashboard">{t('landing.pricing.plans.solo.cta')}</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      </main>
+      {/* Footer */}
+      <footer className="py-8 border-t border-brand-charcoal/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-brand-charcoal/60">
+          <p>&copy; {new Date().getFullYear()} Glo. All rights reserved.</p>
+          <p className="mt-2 text-sm">{t('landing.footer.builtWith')}</p>
+        </div>
+      </footer>
+    </div>
+  );
 }
