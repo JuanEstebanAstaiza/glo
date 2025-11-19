@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import type { Env } from './core-utils';
-import { ManicuristEntity, ServiceEntity, AvailabilityEntity, AppointmentEntity, RewardsProgramEntity, ClientEntity } from "./entities";
+import { ManicuristEntity, ServiceEntity, AvailabilityEntity, AppointmentEntity, RewardsProgramEntity, ClientEntity, SubscriptionEntity } from "./entities";
 import { ok, bad, notFound } from './core-utils';
 import { parse, format, addMinutes, isBefore, isEqual } from 'date-fns';
 const serviceSchema = z.object({
@@ -31,11 +31,16 @@ const rewardsProgramSchema = z.object({
 const statusUpdateSchema = z.object({
     status: z.enum(['active', 'disabled']),
 });
+const subscriptionUpdateSchema = z.object({
+    plan: z.enum(['solo_artist']),
+    status: z.enum(['active', 'cancelled', 'past_due']),
+});
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
   // Seed mock data for demo
   app.use('*', async (c, next) => {
     await ClientEntity.ensureSeed(c.env);
     await ManicuristEntity.ensureSeed(c.env);
+    await SubscriptionEntity.ensureSeed(c.env);
     await next();
   });
   // SERVICES
@@ -158,18 +163,47 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     return ok(c, await entity.mutate(current => ({ ...current, ...c.req.valid('json') })));
   });
   // SUPER ADMIN
-  app.get('/api/admin/manicurists', async (c) => {
-    const [manicurists, clients] = await Promise.all([
+  app.get('/api/admin/stats', async (c) => {
+    const [manicurists, clients, appointments, services] = await Promise.all([
         ManicuristEntity.list(c.env),
         ClientEntity.list(c.env),
+        AppointmentEntity.list(c.env),
+        ServiceEntity.list(c.env),
     ]);
+    const servicesMap = new Map(services.items.map(s => [s.id, s]));
+    const totalRevenue = appointments.items
+        .filter(a => a.status === 'completed')
+        .reduce((sum, app) => sum + (servicesMap.get(app.serviceId)?.price || 0), 0);
+    return ok(c, {
+        totalManicurists: manicurists.items.length,
+        activeManicurists: manicurists.items.filter(m => m.status === 'active').length,
+        totalClients: clients.items.length,
+        totalRevenue,
+    });
+  });
+  app.get('/api/admin/manicurists', async (c) => {
+    const [manicurists, clients, appointments, services] = await Promise.all([
+        ManicuristEntity.list(c.env),
+        ClientEntity.list(c.env),
+        AppointmentEntity.list(c.env),
+        ServiceEntity.list(c.env),
+    ]);
+    const servicesMap = new Map(services.items.map(s => [s.id, s]));
     const clientCounts = clients.items.reduce((acc, client) => {
         acc[client.manicuristId] = (acc[client.manicuristId] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
+    const revenueByManicurist = appointments.items
+        .filter(a => a.status === 'completed')
+        .reduce((acc, app) => {
+            const price = servicesMap.get(app.serviceId)?.price || 0;
+            acc[app.manicuristId] = (acc[app.manicuristId] || 0) + price;
+            return acc;
+        }, {} as Record<string, number>);
     const enrichedManicurists = manicurists.items.map(m => ({
         ...m,
         clientCount: clientCounts[m.id] || 0,
+        totalRevenue: revenueByManicurist[m.id] || 0,
     }));
     return ok(c, enrichedManicurists);
   });
@@ -180,5 +214,13 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     if (!(await entity.exists())) return notFound(c, 'Manicurist not found');
     await entity.patch({ status });
     return ok(c, { id, status });
+  });
+  app.get('/api/admin/subscriptions', async (c) => ok(c, (await SubscriptionEntity.list(c.env)).items));
+  app.put('/api/admin/subscriptions/:id', zValidator('json', subscriptionUpdateSchema.partial()), async (c) => {
+    const { id } = c.req.param();
+    const data = c.req.valid('json');
+    const entity = new SubscriptionEntity(c.env, id);
+    if (!(await entity.exists())) return notFound(c, 'Subscription not found');
+    return ok(c, await entity.mutate(current => ({ ...current, ...data })));
   });
 }

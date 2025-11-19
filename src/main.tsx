@@ -13,6 +13,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RouteErrorBoundary } from '@/components/RouteErrorBoundary';
 import '@/i18n'; // Initialize i18n
 import '@/index.css'
+import { Root } from '@/components/Root';
 import { LoginPage } from '@/pages/LoginPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AppShell } from '@/components/AppShell';
@@ -27,13 +28,8 @@ import { AdminShell } from '@/components/AdminShell';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { AdminManicuristsPage } from '@/pages/admin/AdminManicuristsPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
-import { useAuthStore } from './stores/authStore';
+import { AdminSubscriptionsPage } from '@/pages/admin/AdminSubscriptionsPage';
 const queryClient = new QueryClient();
-const Root = () => {
-  const { isAuthenticated } = useAuthStore.getState();
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
-};
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -73,6 +69,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           { path: "dashboard", element: <AdminDashboardPage /> },
           { path: "manicurists", element: <AdminManicuristsPage /> },
+          { path: "subscriptions", element: <AdminSubscriptionsPage /> },
           { path: "settings", element: <AdminSettingsPage /> },
         ]
       },

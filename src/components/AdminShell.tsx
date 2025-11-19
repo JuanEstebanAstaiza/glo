@@ -6,6 +6,7 @@ import {
   Settings,
   Menu,
   ShieldCheck,
+  CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -15,6 +16,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const navItems = [
   { to: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/admin/manicurists", icon: Users, label: "Manicurists" },
+  { to: "/admin/subscriptions", icon: CreditCard, label: "Subscriptions" },
   { to: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 const NavContent = () => (

@@ -1,5 +1,6 @@
 import { IndexedEntity } from "./core-utils";
-import type { Service, Availability, Appointment, RewardsProgram, Client, Manicurist } from "@shared/types";
+import type { Service, Availability, Appointment, RewardsProgram, Client, Manicurist, Subscription } from "@shared/types";
+import { addYears } from 'date-fns';
 // MANICURIST ENTITY
 export class ManicuristEntity extends IndexedEntity<Manicurist> {
     static readonly entityName = "manicurist";
@@ -84,5 +85,23 @@ export class ClientEntity extends IndexedEntity<Client> {
         { id: 'mock-client-id', name: 'Jane Doe', email: 'jane.doe@example.com', manicuristId: 'mock-manicurist-id' },
         { id: 'mock-client-id-2', name: 'John Smith', email: 'john.smith@example.com', manicuristId: 'mock-manicurist-id' },
         { id: 'client-3', name: 'Sam Wilson', email: 'sam.w@example.com', manicuristId: 'manicurist-2' },
+    ];
+}
+// SUBSCRIPTION ENTITY
+export class SubscriptionEntity extends IndexedEntity<Subscription> {
+    static readonly entityName = "subscription";
+    static readonly indexName = "subscriptions";
+    static readonly initialState: Subscription = {
+        id: "",
+        manicuristId: "",
+        plan: "solo_artist",
+        status: "active",
+        startDate: new Date().toISOString(),
+        endDate: addYears(new Date(), 1).toISOString(),
+    };
+    static readonly seedData: ReadonlyArray<Subscription> = [
+        { id: 'sub-1', manicuristId: 'mock-manicurist-id', plan: 'solo_artist', status: 'active', startDate: '2023-10-01T10:00:00Z', endDate: '2024-10-01T10:00:00Z' },
+        { id: 'sub-2', manicuristId: 'manicurist-2', plan: 'solo_artist', status: 'past_due', startDate: '2023-11-15T14:30:00Z', endDate: '2024-11-15T14:30:00Z' },
+        { id: 'sub-3', manicuristId: 'manicurist-3', plan: 'solo_artist', status: 'cancelled', startDate: '2023-12-20T09:00:00Z', endDate: '2024-12-20T09:00:00Z' },
     ];
 }

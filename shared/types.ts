@@ -11,6 +11,7 @@ export interface Manicurist {
   status: 'active' | 'disabled';
   registrationDate: string; // ISO 8601 format
   clientCount?: number;
+  totalRevenue?: number; // in cents
 }
 export interface Service {
   id: string;
@@ -53,4 +54,12 @@ export interface Availability {
     startTime?: string; // e.g., "09:00"
     endTime?: string;   // e.g., "17:00"
     isEnabled: boolean;
+}
+export interface Subscription {
+  id: string;
+  manicuristId: string;
+  plan: 'solo_artist';
+  status: 'active' | 'cancelled' | 'past_due';
+  startDate: string; // ISO 8601 format
+  endDate: string;   // ISO 8601 format
 }
