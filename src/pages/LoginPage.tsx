@@ -11,6 +11,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { GloLogo } from '@/components/GloLogo';
 import { Toaster, toast } from 'sonner';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(1, { message: "Password is required." }),
@@ -25,6 +32,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const loginAction = useAuthStore(state => state.login);
   const [selectedRole, setSelectedRole] = useState<UserRole>('manicurist');
+  const [isRoleDialogOpen, setRoleDialogOpen] = useState(false);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,6 +41,7 @@ export function LoginPage() {
     },
   });
   const handleLogin = (role: UserRole) => {
+    setRoleDialogOpen(false);
     toast.success(`Logged in as ${role}! Redirecting...`);
     loginAction(role);
     setTimeout(() => {
@@ -138,7 +147,7 @@ export function LoginPage() {
               </span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={() => handleLogin(selectedRole)}>
+          <Button variant="outline" className="w-full" onClick={() => setRoleDialogOpen(true)}>
             <GoogleIcon className="mr-2 h-4 w-4" />
             Sign in with Google
           </Button>
@@ -152,6 +161,21 @@ export function LoginPage() {
           </p>
         </CardFooter>
       </Card>
+      <Dialog open={isRoleDialogOpen} onOpenChange={setRoleDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sign in as...</DialogTitle>
+            <DialogDescription>
+              Please select your role to continue with Google Sign-In.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Button onClick={() => handleLogin('manicurist')} className="w-full">Manicurist</Button>
+            <Button onClick={() => handleLogin('client')} className="w-full">Client</Button>
+            <Button onClick={() => handleLogin('admin')} className="w-full" variant="secondary">Admin</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

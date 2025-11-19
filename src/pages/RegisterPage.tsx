@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore, UserRole } from '@/stores/authStore';
 import { api } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { GloLogo } from '@/components/GloLogo';
 import { Toaster, toast } from 'sonner';
 import type { Client } from '@shared/types';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
@@ -27,6 +34,7 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function RegisterPage() {
   const navigate = useNavigate();
   const loginAction = useAuthStore(state => state.login);
+  const [isRoleDialogOpen, setRoleDialogOpen] = useState(false);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -49,11 +57,17 @@ export function RegisterPage() {
   const onSubmit = (values: RegisterFormValues) => {
     mutation.mutate(values);
   };
-  const handleGoogleSignUp = () => {
-    // Mock Google Sign-Up
-    toast.success('Signing up with Google... Redirecting...');
-    loginAction('client');
-    setTimeout(() => navigate('/client-dashboard'), 1000);
+  const handleGoogleSignUp = (role: UserRole) => {
+    setRoleDialogOpen(false);
+    toast.success(`Signing up as ${role} with Google... Redirecting...`);
+    loginAction(role);
+    setTimeout(() => {
+        if (role === 'client') {
+            navigate('/client-dashboard');
+        } else {
+            navigate('/dashboard');
+        }
+    }, 1000);
   };
   return (
     <div className="min-h-screen bg-brand-cream flex items-center justify-center p-4">
@@ -121,7 +135,7 @@ export function RegisterPage() {
               </span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignUp}>
+          <Button variant="outline" className="w-full" onClick={() => setRoleDialogOpen(true)}>
             <GoogleIcon className="mr-2 h-4 w-4" />
             Sign up with Google
           </Button>
@@ -135,6 +149,20 @@ export function RegisterPage() {
           </p>
         </CardFooter>
       </Card>
+      <Dialog open={isRoleDialogOpen} onOpenChange={setRoleDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sign up as...</DialogTitle>
+            <DialogDescription>
+              Are you a manicurist or a client? Select your role to continue.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Button onClick={() => handleGoogleSignUp('manicurist')} className="w-full">I'm a Manicurist</Button>
+            <Button onClick={() => handleGoogleSignUp('client')} className="w-full">I'm a Client</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
