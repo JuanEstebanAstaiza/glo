@@ -45,7 +45,7 @@ export interface Availability {
     id: string; // e.g., 'monday'
     manicuristId: string;
     dayOfWeek: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
-    startTime: string; // e.g., "09:00"
-    endTime: string;   // e.g., "17:00"
+    startTime?: string; // e.g., "09:00"
+    endTime?: string;   // e.g., "17:00"
     isEnabled: boolean;
 }

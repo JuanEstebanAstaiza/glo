@@ -13,8 +13,8 @@ const serviceSchema = z.object({
 });
 const availabilitySchema = z.object({
     dayOfWeek: z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
-    startTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format, expected HH:mm"),
-    endTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format, expected HH:mm"),
+    startTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format, expected HH:mm").optional(),
+    endTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format, expected HH:mm").optional(),
     isEnabled: z.boolean(),
 });
 export function userRoutes(app: Hono<{ Bindings: Env }>) {

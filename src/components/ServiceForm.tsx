@@ -50,7 +50,6 @@ export function ServiceForm({ onSubmit, defaultValues, isSubmitting }: ServiceFo
       price: 5000, // Default to $50.00
       currency: 'USD',
       ...defaultValues,
-      price: defaultValues?.price, // Keep price in cents
     },
   });
   return (
