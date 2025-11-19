@@ -51,5 +51,24 @@
     "footer": {
       "builtWith": "Built with ❤️ at Cloudflare"
     }
+  },
+  "services": {
+    "title": "Manage Services",
+    "addService": "Add Service",
+    "editService": "Edit Service",
+    "deleteService": "Delete Service",
+    "noServices": "No services yet",
+    "noServicesDescription": "Get started by adding your first service.",
+    "name": "Name",
+    "duration": "Duration",
+    "price": "Price",
+    "actions": "Actions",
+    "addDialogTitle": "Add a New Service",
+    "editDialogTitle": "Edit Service",
+    "deleteDialogTitle": "Are you sure?",
+    "deleteDialogDescription": "This action cannot be undone. This will permanently delete the service \"{{serviceName}}\".",
+    "deleteDialogCancel": "Cancel",
+    "deleteDialogConfirm": "Delete",
+    "deleting": "Deleting..."
   }
 }

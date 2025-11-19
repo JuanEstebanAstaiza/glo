@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlusCircle, MoreHorizontal, Edit, Trash2, Scissors } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,7 @@ const formatCurrency = (amount: number, currency: string) => {
   }).format(amount / 100);
 };
 export function ServicesPage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isFormOpen, setFormOpen] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
@@ -113,19 +115,19 @@ export function ServicesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 lg:py-12">
       <Toaster richColors />
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-brand-charcoal">Manage Services</h1>
+        <h1 className="text-3xl font-bold text-brand-charcoal">{t('services.title')}</h1>
         <Dialog open={isFormOpen} onOpenChange={(open) => {
           setFormOpen(open);
           if (!open) setSelectedService(null);
         }}>
           <DialogTrigger asChild>
             <Button className="bg-brand-charcoal hover:bg-brand-charcoal/90 text-white">
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Service
+              <PlusCircle className="mr-2 h-4 w-4" /> {t('services.addService')}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] bg-white">
             <DialogHeader>
-              <DialogTitle>{selectedService ? 'Edit Service' : 'Add a New Service'}</DialogTitle>
+              <DialogTitle>{selectedService ? t('services.editDialogTitle') : t('services.addDialogTitle')}</DialogTitle>
             </DialogHeader>
             <ServiceForm
               onSubmit={handleFormSubmit}
@@ -150,10 +152,10 @@ export function ServicesPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[40%]">Name</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="w-[40%]">{t('services.name')}</TableHead>
+                <TableHead>{t('services.duration')}</TableHead>
+                <TableHead>{t('services.price')}</TableHead>
+                <TableHead className="text-right">{t('services.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -172,10 +174,10 @@ export function ServicesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEditDialog(service)}>
-                          <Edit className="mr-2 h-4 w-4" /> Edit
+                          <Edit className="mr-2 h-4 w-4" /> {t('services.editService')}
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-red-600" onClick={() => openDeleteDialog(service)}>
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete
+                          <Trash2 className="mr-2 h-4 w-4" /> {t('services.deleteService')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -187,20 +189,20 @@ export function ServicesPage() {
         ) : (
           <div className="text-center p-12 border-2 border-dashed border-stone-200 rounded-lg">
             <Scissors className="mx-auto h-12 w-12 text-stone-400" />
-            <h3 className="mt-4 text-lg font-medium text-brand-charcoal">No services yet</h3>
+            <h3 className="mt-4 text-lg font-medium text-brand-charcoal">{t('services.noServices')}</h3>
             <p className="mt-1 text-sm text-stone-500">
-              Get started by adding your first service.
+              {t('services.noServicesDescription')}
             </p>
             <div className="mt-6">
                <Dialog open={isFormOpen} onOpenChange={setFormOpen}>
                   <DialogTrigger asChild>
                      <Button className="bg-brand-charcoal hover:bg-brand-charcoal/90 text-white">
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add Service
+                        <PlusCircle className="mr-2 h-4 w-4" /> {t('services.addService')}
                      </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px] bg-white">
                      <DialogHeader>
-                        <DialogTitle>Add a New Service</DialogTitle>
+                        <DialogTitle>{t('services.addDialogTitle')}</DialogTitle>
                      </DialogHeader>
                      <ServiceForm onSubmit={handleFormSubmit} isSubmitting={createMutation.isPending} />
                   </DialogContent>
@@ -212,13 +214,13 @@ export function ServicesPage() {
       <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t('services.deleteDialogTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the service "{selectedService?.name}".
+              {t('services.deleteDialogDescription', { serviceName: selectedService?.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('services.deleteDialogCancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (selectedService) deleteMutation.mutate(selectedService.id);
@@ -226,7 +228,7 @@ export function ServicesPage() {
               className="bg-red-600 hover:bg-red-700"
               disabled={deleteMutation.isPending}
             >
-              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+              {deleteMutation.isPending ? t('services.deleting') : t('services.deleteDialogConfirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
