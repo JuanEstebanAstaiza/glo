@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -7,12 +7,23 @@ import {
   Menu,
   ShieldCheck,
   CreditCard,
+  LogOut,
+  UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { GloLogo } from "./GloLogo";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuthStore } from "@/stores/authStore";
 const navItems = [
   { to: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/admin/manicurists", icon: Users, label: "Manicurists" },
@@ -46,8 +57,45 @@ const NavContent = () => (
     </nav>
   </div>
 );
+const UserMenu = () => {
+  const logoutAction = useAuthStore(state => state.logout);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logoutAction();
+    navigate('/login');
+  };
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size="icon" className="rounded-full">
+          <UserCircle className="h-5 w-5" />
+          <span className="sr-only">Toggle user menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 export function AdminShell() {
   const isMobile = useIsMobile();
+  const HeaderContent = () => (
+    <>
+      <div className="flex items-center gap-2">
+        <ShieldCheck className="h-7 w-7 text-brand-rose" />
+        <span className="text-xl font-bold text-brand-charcoal tracking-tight">Glo Admin</span>
+      </div>
+      <div className="ml-auto">
+        <UserMenu />
+      </div>
+    </>
+  );
   if (isMobile) {
     return (
       <div className="min-h-screen w-full bg-background">
@@ -63,10 +111,7 @@ export function AdminShell() {
               <NavContent />
             </SheetContent>
           </Sheet>
-          <div className="flex items-center gap-2">
-             <ShieldCheck className="h-7 w-7 text-brand-rose" />
-             <span className="text-xl font-bold text-brand-charcoal tracking-tight">Glo Admin</span>
-          </div>
+          <HeaderContent />
         </header>
         <main className="p-4">
           <Outlet />
@@ -80,6 +125,11 @@ export function AdminShell() {
         <NavContent />
       </div>
       <div className="flex flex-col">
+        <header className="flex h-16 items-center gap-4 border-b bg-background px-6">
+          <div className="ml-auto">
+            <UserMenu />
+          </div>
+        </header>
         <main className="flex-1 overflow-auto bg-muted/40">
           <Outlet />
         </main>

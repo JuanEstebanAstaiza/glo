@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuthStore } from '@/stores/authStore';
+import { useAuthStore, UserRole } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { GloLogo } from '@/components/GloLogo';
 import { Toaster, toast } from 'sonner';
 import { Separator } from '@/components/ui/separator';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
   password: z.string().min(1, { message: "Password is required." }),
@@ -24,6 +25,7 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function LoginPage() {
   const navigate = useNavigate();
   const loginAction = useAuthStore(state => state.login);
+  const [selectedRole, setSelectedRole] = useState<UserRole>('manicurist');
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,14 +34,15 @@ export function LoginPage() {
     },
   });
   const handleLogin = () => {
-    toast.success('Login successful! Redirecting...');
-    loginAction();
+    toast.success(`Logged in as ${selectedRole}! Redirecting...`);
+    loginAction(selectedRole);
+    // The Root component will handle redirection based on role
     setTimeout(() => {
-      navigate('/dashboard');
+      navigate('/');
     }, 1000);
   };
   const onSubmit = (values: LoginFormValues) => {
-    console.log('Login attempt with:', values);
+    console.log('Login attempt with:', values, 'as', selectedRole);
     handleLogin();
   };
   return (
@@ -49,7 +52,7 @@ export function LoginPage() {
         <CardHeader className="text-center">
           <GloLogo className="h-12 w-12 mx-auto text-brand-rose mb-4" />
           <CardTitle className="text-2xl font-bold text-brand-charcoal">Welcome Back</CardTitle>
-          <CardDescription>Sign in to manage your nail suite.</CardDescription>
+          <CardDescription>Sign in to your Glo account.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -80,6 +83,36 @@ export function LoginPage() {
                   </FormItem>
                 )}
               />
+              <FormItem className="space-y-3">
+                <FormLabel>Sign in as</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={(value) => setSelectedRole(value as UserRole)}
+                    defaultValue={selectedRole}
+                    className="flex space-x-4"
+                  >
+                    <FormItem className="flex items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="manicurist" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Manicurist</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="client" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Client</FormLabel>
+                    </FormItem>
+                     <FormItem className="flex items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value="admin" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Admin</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
               <Button type="submit" className="w-full bg-brand-charcoal hover:bg-brand-charcoal/90 text-white" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? 'Signing In...' : 'Sign In'}
               </Button>

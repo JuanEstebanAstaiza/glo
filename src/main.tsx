@@ -29,6 +29,7 @@ import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { AdminManicuristsPage } from '@/pages/admin/AdminManicuristsPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
 import { AdminSubscriptionsPage } from '@/pages/admin/AdminSubscriptionsPage';
+import { ClientDashboardPage } from '@/pages/ClientDashboardPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { path: "dashboard", element: <DashboardPage /> },
+          { path: "client-dashboard", element: <ClientDashboardPage /> },
           { path: "services", element: <ServicesPage /> },
           { path: "schedule", element: <SchedulePage /> },
           { path: "appointments", element: <AppointmentsPage /> },
