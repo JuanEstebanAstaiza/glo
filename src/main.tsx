@@ -21,6 +21,9 @@ import { PublicBookingPage } from '@/pages/PublicBookingPage';
 import { AppointmentsPage } from '@/pages/AppointmentsPage';
 import { RewardsPage } from '@/pages/RewardsPage';
 import { ClientsPage } from '@/pages/ClientsPage';
+import { AdminShell } from '@/components/AdminShell';
+import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
+import { AdminManicuristsPage } from '@/pages/admin/AdminManicuristsPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -44,6 +47,17 @@ const router = createBrowserRouter([
       { path: "appointments", element: <AppointmentsPage /> },
       { path: "rewards", element: <RewardsPage /> },
       { path: "clients", element: <ClientsPage /> },
+    ]
+  },
+  {
+    path: "/admin",
+    element: <AdminShell />,
+    errorElement: <RouteErrorBoundary />,
+    children: [
+      { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+      { path: "dashboard", element: <AdminDashboardPage /> },
+      { path: "manicurists", element: <AdminManicuristsPage /> },
+      { path: "settings", element: <div>Admin Settings Page</div> },
     ]
   },
   {

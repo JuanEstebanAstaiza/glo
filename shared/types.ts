@@ -8,7 +8,9 @@ export interface Manicurist {
   id: string;
   name: string;
   email: string;
-  // other profile details
+  status: 'active' | 'disabled';
+  registrationDate: string; // ISO 8601 format
+  clientCount?: number;
 }
 export interface Service {
   id: string;

@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import type { Env } from './core-utils';
-import { ServiceEntity, AvailabilityEntity, AppointmentEntity, RewardsProgramEntity, ClientEntity } from "./entities";
+import { ManicuristEntity, ServiceEntity, AvailabilityEntity, AppointmentEntity, RewardsProgramEntity, ClientEntity } from "./entities";
 import { ok, bad, notFound } from './core-utils';
 import { parse, format, addMinutes, isBefore, isEqual } from 'date-fns';
 const serviceSchema = z.object({
@@ -28,10 +28,14 @@ const rewardsProgramSchema = z.object({
     targetAppointments: z.number().int().positive(),
     rewardDescription: z.string().min(5),
 });
+const statusUpdateSchema = z.object({
+    status: z.enum(['active', 'disabled']),
+});
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
-  // Seed mock clients for demo
+  // Seed mock data for demo
   app.use('*', async (c, next) => {
     await ClientEntity.ensureSeed(c.env);
+    await ManicuristEntity.ensureSeed(c.env);
     await next();
   });
   // SERVICES
@@ -152,5 +156,29 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     const entity = new RewardsProgramEntity(c.env, id);
     if (!(await entity.exists())) return notFound(c, 'Reward program not found');
     return ok(c, await entity.mutate(current => ({ ...current, ...c.req.valid('json') })));
+  });
+  // SUPER ADMIN
+  app.get('/api/admin/manicurists', async (c) => {
+    const [manicurists, clients] = await Promise.all([
+        ManicuristEntity.list(c.env),
+        ClientEntity.list(c.env),
+    ]);
+    const clientCounts = clients.items.reduce((acc, client) => {
+        acc[client.manicuristId] = (acc[client.manicuristId] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+    const enrichedManicurists = manicurists.items.map(m => ({
+        ...m,
+        clientCount: clientCounts[m.id] || 0,
+    }));
+    return ok(c, enrichedManicurists);
+  });
+  app.put('/api/admin/manicurists/:id/status', zValidator('json', statusUpdateSchema), async (c) => {
+    const { id } = c.req.param();
+    const { status } = c.req.valid('json');
+    const entity = new ManicuristEntity(c.env, id);
+    if (!(await entity.exists())) return notFound(c, 'Manicurist not found');
+    await entity.patch({ status });
+    return ok(c, { id, status });
   });
 }

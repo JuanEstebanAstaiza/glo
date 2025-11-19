@@ -1,5 +1,22 @@
 import { IndexedEntity } from "./core-utils";
-import type { Service, Availability, Appointment, RewardsProgram, Client } from "@shared/types";
+import type { Service, Availability, Appointment, RewardsProgram, Client, Manicurist } from "@shared/types";
+// MANICURIST ENTITY
+export class ManicuristEntity extends IndexedEntity<Manicurist> {
+    static readonly entityName = "manicurist";
+    static readonly indexName = "manicurists";
+    static readonly initialState: Manicurist = {
+        id: "",
+        name: "",
+        email: "",
+        status: "active",
+        registrationDate: new Date().toISOString(),
+    };
+    static readonly seedData: ReadonlyArray<Manicurist> = [
+        { id: 'mock-manicurist-id', name: 'Alice Wonder', email: 'alice@example.com', status: 'active', registrationDate: '2023-10-01T10:00:00Z' },
+        { id: 'manicurist-2', name: 'Bella Ciao', email: 'bella@example.com', status: 'active', registrationDate: '2023-11-15T14:30:00Z' },
+        { id: 'manicurist-3', name: 'Carla Smith', email: 'carla@example.com', status: 'disabled', registrationDate: '2023-12-20T09:00:00Z' },
+    ];
+}
 // SERVICE ENTITY
 export class ServiceEntity extends IndexedEntity<Service> {
   static readonly entityName = "service";
@@ -66,5 +83,6 @@ export class ClientEntity extends IndexedEntity<Client> {
     static readonly seedData: ReadonlyArray<Client> = [
         { id: 'mock-client-id', name: 'Jane Doe', email: 'jane.doe@example.com', manicuristId: 'mock-manicurist-id' },
         { id: 'mock-client-id-2', name: 'John Smith', email: 'john.smith@example.com', manicuristId: 'mock-manicurist-id' },
+        { id: 'client-3', name: 'Sam Wilson', email: 'sam.w@example.com', manicuristId: 'manicurist-2' },
     ];
 }
