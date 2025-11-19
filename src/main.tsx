@@ -13,7 +13,6 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RouteErrorBoundary } from '@/components/RouteErrorBoundary';
 import '@/i18n'; // Initialize i18n
 import '@/index.css'
-import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AppShell } from '@/components/AppShell';
@@ -28,11 +27,17 @@ import { AdminShell } from '@/components/AdminShell';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { AdminManicuristsPage } from '@/pages/admin/AdminManicuristsPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
+import { useAuthStore } from './stores/authStore';
 const queryClient = new QueryClient();
+const Root = () => {
+  const { isAuthenticated } = useAuthStore.getState();
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <Root />,
     errorElement: <RouteErrorBoundary />,
   },
   {
@@ -73,10 +78,6 @@ const router = createBrowserRouter([
       },
     ]
   },
-  {
-    path: "*",
-    element: <Navigate to="/" replace />,
-  }
 ]);
 // Do not touch this code
 createRoot(document.getElementById('root')!).render(
