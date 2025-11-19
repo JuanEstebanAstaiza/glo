@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlusCircle, MoreHorizontal, Edit, Trash2, Scissors } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,7 +48,6 @@ const formatCurrency = (amount: number, currency: string) => {
   }).format(amount / 100);
 };
 export function ServicesPage() {
-  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isFormOpen, setFormOpen] = useState(false);
   const [isAlertOpen, setAlertOpen] = useState(false);
@@ -65,35 +63,35 @@ export function ServicesPage() {
       setSelectedService(null);
     },
     onError: (err: Error) => {
-      toast.error(err.message || t('services.unexpectedError'));
+      toast.error(err.message || 'An unexpected error occurred.');
     },
   };
   const createMutation = useMutation({
     mutationFn: (newService: Omit<Service, 'id' | 'manicuristId'>) => api<Service>('/api/services', { method: 'POST', body: JSON.stringify(newService) }),
     ...mutationOptions,
-    onSuccess: () => {
-      toast.success(t('services.createSuccess'));
-      mutationOptions.onSuccess();
+    onSuccess: (...args) => {
+      toast.success('Service created successfully!');
+      mutationOptions.onSuccess(...args);
     },
   });
   const updateMutation = useMutation({
     mutationFn: (updatedService: Partial<Service> & { id: string }) => api<Service>(`/api/services/${updatedService.id}`, { method: 'PUT', body: JSON.stringify(updatedService) }),
     ...mutationOptions,
-    onSuccess: () => {
-      toast.success(t('services.updateSuccess'));
-      mutationOptions.onSuccess();
+    onSuccess: (...args) => {
+      toast.success('Service updated successfully!');
+      mutationOptions.onSuccess(...args);
     },
   });
   const deleteMutation = useMutation({
     mutationFn: (serviceId: string) => api(`/api/services/${serviceId}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['services'] });
-      toast.success(t('services.deleteSuccess'));
+      toast.success('Service deleted successfully!');
       setAlertOpen(false);
       setSelectedService(null);
     },
     onError: (err: Error) => {
-      toast.error(err.message || t('services.deleteError'));
+      toast.error(err.message || 'Failed to delete service.');
     },
   });
   const handleFormSubmit = (values: any) => {
@@ -115,19 +113,19 @@ export function ServicesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 lg:py-12">
       <Toaster richColors />
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-brand-charcoal">{t('services.title')}</h1>
+        <h1 className="text-3xl font-bold text-brand-charcoal">Manage Services</h1>
         <Dialog open={isFormOpen} onOpenChange={(open) => {
           setFormOpen(open);
           if (!open) setSelectedService(null);
         }}>
           <DialogTrigger asChild>
             <Button className="bg-brand-charcoal hover:bg-brand-charcoal/90 text-white">
-              <PlusCircle className="mr-2 h-4 w-4" /> {t('services.addService')}
+              <PlusCircle className="mr-2 h-4 w-4" /> Add Service
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] bg-white">
             <DialogHeader>
-              <DialogTitle>{selectedService ? t('services.editDialogTitle') : t('services.addDialogTitle')}</DialogTitle>
+              <DialogTitle>{selectedService ? 'Edit Service' : 'Add a New Service'}</DialogTitle>
             </DialogHeader>
             <ServiceForm
               onSubmit={handleFormSubmit}
@@ -146,38 +144,38 @@ export function ServicesPage() {
           </div>
         ) : error ? (
           <div className="p-8 text-center text-red-600">
-            {t('services.loadError')}: {error.message}
+            Failed to load services: {error.message}
           </div>
         ) : services && services.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[40%]">{t('services.name')}</TableHead>
-                <TableHead>{t('services.duration')}</TableHead>
-                <TableHead>{t('services.price')}</TableHead>
-                <TableHead className="text-right">{t('services.actions')}</TableHead>
+                <TableHead className="w-[40%]">Name</TableHead>
+                <TableHead>Duration</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {services.map((service) => (
                 <TableRow key={service.id}>
                   <TableCell className="font-medium">{service.name}</TableCell>
-                  <TableCell>{t('services.durationValue', { duration: service.duration })}</TableCell>
+                  <TableCell>{service.duration} min</TableCell>
                   <TableCell>{formatCurrency(service.price, service.currency)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">{t('services.openMenu')}</span>
+                          <span className="sr-only">Open menu</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEditDialog(service)}>
-                          <Edit className="mr-2 h-4 w-4" /> {t('services.editService')}
+                          <Edit className="mr-2 h-4 w-4" /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-red-600" onClick={() => openDeleteDialog(service)}>
-                          <Trash2 className="mr-2 h-4 w-4" /> {t('services.deleteService')}
+                          <Trash2 className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -189,20 +187,20 @@ export function ServicesPage() {
         ) : (
           <div className="text-center p-12 border-2 border-dashed border-stone-200 rounded-lg">
             <Scissors className="mx-auto h-12 w-12 text-stone-400" />
-            <h3 className="mt-4 text-lg font-medium text-brand-charcoal">{t('services.noServices')}</h3>
+            <h3 className="mt-4 text-lg font-medium text-brand-charcoal">No services yet</h3>
             <p className="mt-1 text-sm text-stone-500">
-              {t('services.noServicesDescription')}
+              Get started by adding your first service.
             </p>
             <div className="mt-6">
                <Dialog open={isFormOpen} onOpenChange={setFormOpen}>
                   <DialogTrigger asChild>
                      <Button className="bg-brand-charcoal hover:bg-brand-charcoal/90 text-white">
-                        <PlusCircle className="mr-2 h-4 w-4" /> {t('services.addService')}
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add Service
                      </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px] bg-white">
                      <DialogHeader>
-                        <DialogTitle>{t('services.addDialogTitle')}</DialogTitle>
+                        <DialogTitle>Add a New Service</DialogTitle>
                      </DialogHeader>
                      <ServiceForm onSubmit={handleFormSubmit} isSubmitting={createMutation.isPending} />
                   </DialogContent>
@@ -214,13 +212,13 @@ export function ServicesPage() {
       <AlertDialog open={isAlertOpen} onOpenChange={setAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('services.deleteDialogTitle')}</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('services.deleteDialogDescription', { serviceName: selectedService?.name })}
+              This action cannot be undone. This will permanently delete the service "{selectedService?.name}".
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('services.deleteDialogCancel')}</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (selectedService) deleteMutation.mutate(selectedService.id);
@@ -228,7 +226,7 @@ export function ServicesPage() {
               className="bg-red-600 hover:bg-red-700"
               disabled={deleteMutation.isPending}
             >
-              {deleteMutation.isPending ? t('services.deleting') : t('services.deleteDialogConfirm')}
+              {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

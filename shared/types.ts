@@ -3,22 +3,41 @@ export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
 }
-
-// Minimal real-world chat example types (shared by frontend and worker)
-export interface User {
+// Core Data Models for Glo Nail SaaS
+export interface Manicurist {
   id: string;
   name: string;
+  email: string;
+  // other profile details
 }
-
-export interface Chat {
+export interface Service {
   id: string;
-  title: string;
+  manicuristId: string; // To associate service with a manicurist
+  name: string;
+  description: string;
+  duration: number; // in minutes
+  price: number; // in cents to avoid floating point issues
+  currency: 'USD' | 'EUR' | 'GBP' | 'JPY'; // Example currencies
 }
-
-export interface ChatMessage {
+export interface Client {
   id: string;
-  chatId: string;
-  userId: string;
-  text: string;
-  ts: number; // epoch millis
+  name: string;
+  email: string;
+  manicuristId: string; // Link to their specific manicurist
+}
+export interface Appointment {
+  id: string;
+  clientId: string;
+  manicuristId: string;
+  serviceId: string;
+  startTime: string; // ISO 8601 format
+  endTime: string;   // ISO 8601 format
+  status: 'scheduled' | 'completed' | 'cancelled';
+}
+export interface RewardsProgram {
+  id: string;
+  manicuristId: string;
+  name: string;
+  targetAppointments: number;
+  rewardDescription: string;
 }

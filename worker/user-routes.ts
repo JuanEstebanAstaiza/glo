@@ -1,75 +1,65 @@
 import { Hono } from "hono";
+import { z } from "zod";
+import { zValidator } from "@hono/zod-validator";
 import type { Env } from './core-utils';
-import { UserEntity, ChatBoardEntity } from "./entities";
-import { ok, bad, notFound, isStr } from './core-utils';
-
+import { ServiceEntity } from "./entities";
+import { ok, bad, notFound } from './core-utils';
+const serviceSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional().default(""),
+  duration: z.number().int().positive("Duration must be a positive number"),
+  price: z.number().int().min(0, "Price cannot be negative"),
+  currency: z.enum(["USD", "EUR", "GBP", "JPY"]),
+});
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
-  app.get('/api/test', (c) => c.json({ success: true, data: { name: 'CF Workers Demo' }}));
-
-  // USERS
-  app.get('/api/users', async (c) => {
-    await UserEntity.ensureSeed(c.env);
-    const cq = c.req.query('cursor');
-    const lq = c.req.query('limit');
-    const page = await UserEntity.list(c.env, cq ?? null, lq ? Math.max(1, (Number(lq) | 0)) : undefined);
-    return ok(c, page);
+  // SERVICES
+  app.get('/api/services', async (c) => {
+    // In a real app, you'd filter by manicuristId
+    const page = await ServiceEntity.list(c.env);
+    return ok(c, page.items);
   });
-
-  app.post('/api/users', async (c) => {
-    const { name } = (await c.req.json()) as { name?: string };
-    if (!name?.trim()) return bad(c, 'name required');
-    return ok(c, await UserEntity.create(c.env, { id: crypto.randomUUID(), name: name.trim() }));
+  app.post(
+    '/api/services',
+    zValidator('json', serviceSchema),
+    async (c) => {
+      const serviceData = c.req.valid('json');
+      const newService = {
+        id: crypto.randomUUID(),
+        manicuristId: 'mock-manicurist-id', // Replace with actual authenticated user ID
+        ...serviceData,
+      };
+      const created = await ServiceEntity.create(c.env, newService);
+      return ok(c, created);
+    }
+  );
+  app.get('/api/services/:id', async (c) => {
+    const { id } = c.req.param();
+    const service = new ServiceEntity(c.env, id);
+    if (!(await service.exists())) {
+      return notFound(c, 'Service not found');
+    }
+    return ok(c, await service.getState());
   });
-
-  // CHATS
-  app.get('/api/chats', async (c) => {
-    await ChatBoardEntity.ensureSeed(c.env);
-    const cq = c.req.query('cursor');
-    const lq = c.req.query('limit');
-    const page = await ChatBoardEntity.list(c.env, cq ?? null, lq ? Math.max(1, (Number(lq) | 0)) : undefined);
-    return ok(c, page);
-  });
-
-  app.post('/api/chats', async (c) => {
-    const { title } = (await c.req.json()) as { title?: string };
-    if (!title?.trim()) return bad(c, 'title required');
-    const created = await ChatBoardEntity.create(c.env, { id: crypto.randomUUID(), title: title.trim(), messages: [] });
-    return ok(c, { id: created.id, title: created.title });
-  });
-
-  // MESSAGES
-  app.get('/api/chats/:chatId/messages', async (c) => {
-    const chat = new ChatBoardEntity(c.env, c.req.param('chatId'));
-    if (!await chat.exists()) return notFound(c, 'chat not found');
-    return ok(c, await chat.listMessages());
-  });
-
-  app.post('/api/chats/:chatId/messages', async (c) => {
-    const chatId = c.req.param('chatId');
-    const { userId, text } = (await c.req.json()) as { userId?: string; text?: string };
-    if (!isStr(userId) || !text?.trim()) return bad(c, 'userId and text required');
-    const chat = new ChatBoardEntity(c.env, chatId);
-    if (!await chat.exists()) return notFound(c, 'chat not found');
-    return ok(c, await chat.sendMessage(userId, text.trim()));
-  });
-
-  // DELETE: Users
-  app.delete('/api/users/:id', async (c) => ok(c, { id: c.req.param('id'), deleted: await UserEntity.delete(c.env, c.req.param('id')) }));
-
-  app.post('/api/users/deleteMany', async (c) => {
-    const { ids } = (await c.req.json()) as { ids?: string[] };
-    const list = ids?.filter(isStr) ?? [];
-    if (list.length === 0) return bad(c, 'ids required');
-    return ok(c, { deletedCount: await UserEntity.deleteMany(c.env, list), ids: list });
-  });
-
-  // DELETE: Chats
-  app.delete('/api/chats/:id', async (c) => ok(c, { id: c.req.param('id'), deleted: await ChatBoardEntity.delete(c.env, c.req.param('id')) }));
-
-  app.post('/api/chats/deleteMany', async (c) => {
-    const { ids } = (await c.req.json()) as { ids?: string[] };
-    const list = ids?.filter(isStr) ?? [];
-    if (list.length === 0) return bad(c, 'ids required');
-    return ok(c, { deletedCount: await ChatBoardEntity.deleteMany(c.env, list), ids: list });
+  app.put(
+    '/api/services/:id',
+    zValidator('json', serviceSchema.partial()),
+    async (c) => {
+      const { id } = c.req.param();
+      const serviceUpdates = c.req.valid('json');
+      const service = new ServiceEntity(c.env, id);
+      if (!(await service.exists())) {
+        return notFound(c, 'Service not found');
+      }
+      const updated = await service.mutate(current => ({ ...current, ...serviceUpdates }));
+      return ok(c, updated);
+    }
+  );
+  app.delete('/api/services/:id', async (c) => {
+    const { id } = c.req.param();
+    const deleted = await ServiceEntity.delete(c.env, id);
+    if (!deleted) {
+      return notFound(c, 'Service not found');
+    }
+    return ok(c, { id, deleted });
   });
 }
