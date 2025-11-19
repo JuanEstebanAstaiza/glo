@@ -3,6 +3,7 @@
     "nav": {
       "features": "Características",
       "pricing": "Precios",
+      "artisans": "Artesanas",
       "login": "Iniciar Sesión",
       "getStarted": "Comenzar"
     },
@@ -29,13 +30,19 @@
         }
       }
     },
+    "artisans": {
+      "title": "Artesanas Destacadas",
+      "subtitle": "Descubre talentosas artistas de uñas en la plataforma Glo.",
+      "reviews": "({{count}} reseñas)",
+      "cta": "Ver Perfil y Reservar"
+    },
     "pricing": {
       "title": "Precios simples y transparentes.",
       "subtitle": "Elige el plan adecuado para ti. Sin cargos ocultos, nunca.",
       "plans": {
         "solo": {
           "title": "Artista Solista",
-          "price": "��29",
+          "price": "€29",
           "period": "/ mes",
           "features": [
             "Servicios Ilimitados",

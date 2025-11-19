@@ -3,6 +3,7 @@
     "nav": {
       "features": "Features",
       "pricing": "Pricing",
+      "artisans": "Artisans",
       "login": "Login",
       "getStarted": "Get Started"
     },
@@ -28,6 +29,12 @@
           "description": "Build your own rewards program to keep clients coming back and feeling appreciated."
         }
       }
+    },
+    "artisans": {
+      "title": "Featured Artisans",
+      "subtitle": "Discover talented nail artists on the Glo platform.",
+      "reviews": "({count} reviews)",
+      "cta": "View Profile & Book"
     },
     "pricing": {
       "title": "Simple, transparent pricing.",

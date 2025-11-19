@@ -3,6 +3,7 @@
     "nav": {
       "features": "Funktionen",
       "pricing": "Preise",
+      "artisans": "Künstlerinnen",
       "login": "Anmelden",
       "getStarted": "Loslegen"
     },
@@ -28,6 +29,12 @@
           "description": "Erstellen Sie Ihr eigenes Belohnungsprogramm, damit Kunden immer wieder kommen und sich wertgeschätzt fühlen."
         }
       }
+    },
+    "artisans": {
+      "title": "Vorgestellte Künstlerinnen",
+      "subtitle": "Entdecken Sie talentierte Nagelkünstlerinnen auf der Glo-Plattform.",
+      "reviews": "({{count}} Bewertungen)",
+      "cta": "Profil ansehen & Buchen"
     },
     "pricing": {
       "title": "Einfache, transparente Preise.",

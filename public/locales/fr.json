@@ -3,6 +3,7 @@
     "nav": {
       "features": "Fonctionnalités",
       "pricing": "Tarifs",
+      "artisans": "Artisanes",
       "login": "Connexion",
       "getStarted": "Commencer"
     },
@@ -28,6 +29,12 @@
           "description": "Créez votre propre programme de récompenses pour que les clients reviennent et se sentent appréciés."
         }
       }
+    },
+    "artisans": {
+      "title": "Artisanes en Vedette",
+      "subtitle": "Découvrez des artistes ongulaires talentueuses sur la plateforme Glo.",
+      "reviews": "({{count}} avis)",
+      "cta": "Voir le Profil et Réserver"
     },
     "pricing": {
       "title": "Des tarifs simples et transparents.",
