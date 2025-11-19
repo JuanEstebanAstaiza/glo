@@ -1,5 +1,5 @@
 import { IndexedEntity } from "./core-utils";
-import type { Service, Availability } from "@shared/types";
+import type { Service, Availability, Appointment } from "@shared/types";
 // SERVICE ENTITY: one DO instance per service
 export class ServiceEntity extends IndexedEntity<Service> {
   static readonly entityName = "service";
@@ -25,5 +25,19 @@ export class AvailabilityEntity extends IndexedEntity<Availability> {
         startTime: "09:00",
         endTime: "17:00",
         isEnabled: false,
+    };
+}
+// APPOINTMENT ENTITY: one DO instance per appointment
+export class AppointmentEntity extends IndexedEntity<Appointment> {
+    static readonly entityName = "appointment";
+    static readonly indexName = "appointments";
+    static readonly initialState: Appointment = {
+        id: "",
+        clientId: "",
+        manicuristId: "",
+        serviceId: "",
+        startTime: "",
+        endTime: "",
+        status: "scheduled",
     };
 }

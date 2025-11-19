@@ -17,11 +17,17 @@ import { AppShell } from '@/components/AppShell';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ServicesPage } from '@/pages/ServicesPage';
 import { SchedulePage } from '@/pages/SchedulePage';
+import { PublicBookingPage } from '@/pages/PublicBookingPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/book/:manicuristId",
+    element: <PublicBookingPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {

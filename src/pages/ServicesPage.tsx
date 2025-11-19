@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { PlusCircle, MoreHorizontal, Edit, Trash2, Scissors } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -69,17 +69,17 @@ export function ServicesPage() {
   const createMutation = useMutation({
     mutationFn: (newService: Omit<Service, 'id' | 'manicuristId'>) => api<Service>('/api/services', { method: 'POST', body: JSON.stringify(newService) }),
     ...mutationOptions,
-    onSuccess: (...args) => {
+    onSuccess: () => {
       toast.success('Service created successfully!');
-      mutationOptions.onSuccess(...args);
+      mutationOptions.onSuccess();
     },
   });
   const updateMutation = useMutation({
     mutationFn: (updatedService: Partial<Service> & { id: string }) => api<Service>(`/api/services/${updatedService.id}`, { method: 'PUT', body: JSON.stringify(updatedService) }),
     ...mutationOptions,
-    onSuccess: (...args) => {
+    onSuccess: () => {
       toast.success('Service updated successfully!');
-      mutationOptions.onSuccess(...args);
+      mutationOptions.onSuccess();
     },
   });
   const deleteMutation = useMutation({

@@ -92,6 +92,7 @@ export function SchedulePage() {
   const FormDialogContent = isMobile ? SheetContent : DialogContent;
   const FormDialogHeader = isMobile ? SheetHeader : DialogHeader;
   const FormDialogTitle = isMobile ? SheetTitle : DialogTitle;
+  const contentProps = isMobile ? { side: 'bottom' as const } : {};
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 lg:py-12">
       <Toaster richColors />
@@ -99,7 +100,7 @@ export function SchedulePage() {
         <h1 className="text-3xl font-bold text-brand-charcoal">My Schedule</h1>
         <FormDialog open={isFormOpen} onOpenChange={setFormOpen}>
           <FormDialogTrigger asChild>{EditTrigger}</FormDialogTrigger>
-          <FormDialogContent className="bg-white" side={isMobile ? 'bottom' : undefined}>
+          <FormDialogContent className="bg-white" {...contentProps}>
             <FormDialogHeader>
               <FormDialogTitle>Edit Weekly Availability</FormDialogTitle>
             </FormDialogHeader>
