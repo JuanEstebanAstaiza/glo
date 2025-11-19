@@ -3,7 +3,6 @@
     "nav": {
       "features": "Features",
       "pricing": "Pricing",
-      "artisans": "Artisans",
       "login": "Login",
       "getStarted": "Get Started"
     },
@@ -30,12 +29,6 @@
         }
       }
     },
-    "artisans": {
-      "title": "Featured Artisans",
-      "subtitle": "Discover talented nail artists on the Glo platform.",
-      "reviews": "({count} reviews)",
-      "cta": "View Profile & Book"
-    },
     "pricing": {
       "title": "Simple, transparent pricing.",
       "subtitle": "Choose the plan that's right for you. No hidden fees, ever.",
@@ -56,67 +49,7 @@
       }
     },
     "footer": {
-      "builtWith": "Built with ❤�� at Cloudflare"
-    }
-  },
-  "services": {
-    "title": "Manage Services",
-    "addService": "Add Service",
-    "editService": "Edit Service",
-    "deleteService": "Delete Service",
-    "noServices": "No services yet",
-    "noServicesDescription": "Get started by adding your first service.",
-    "name": "Name",
-    "duration": "Duration",
-    "price": "Price",
-    "actions": "Actions",
-    "addDialogTitle": "Add a New Service",
-    "editDialogTitle": "Edit Service",
-    "deleteDialogTitle": "Are you sure?",
-    "deleteDialogDescription": "This action cannot be undone. This will permanently delete the service \"{{serviceName}}\".",
-    "deleteDialogCancel": "Cancel",
-    "deleteDialogConfirm": "Delete",
-    "deleting": "Deleting...",
-    "unexpectedError": "An unexpected error occurred.",
-    "createSuccess": "Service created successfully.",
-    "updateSuccess": "Service updated successfully.",
-    "deleteSuccess": "Service deleted successfully.",
-    "deleteError": "Failed to delete service.",
-    "loadError": "Failed to load services",
-    "durationValue": "{{duration}} min",
-    "openMenu": "Open menu"
-  },
-  "sidebar": {
-    "template": "Template",
-    "search": "Search",
-    "home": "Home",
-    "projects": "Projects",
-    "explore": "Explore",
-    "quickLinks": "Quick Links",
-    "starred": "Starred",
-    "support": "Support",
-    "settings": "Settings",
-    "footer": "A simple shadcn sidebar"
-  },
-  "schedule": {
-    "title": "My Schedule",
-    "editAvailability": "Edit Availability",
-    "editWeeklyAvailability": "Edit Weekly Availability",
-    "weeklyAvailability": "Weekly Availability",
-    "weeklyAvailabilityDescription": "Your standard weekly hours.",
-    "unavailable": "Unavailable",
-    "updateSuccess": "Availability updated successfully.",
-    "updateError": "Failed to update availability.",
-    "loadError": "Failed to load availability data.",
-    "loadingForm": "Loading form...",
-    "days": {
-      "monday": "Monday",
-      "tuesday": "Tuesday",
-      "wednesday": "Wednesday",
-      "thursday": "Thursday",
-      "friday": "Friday",
-      "saturday": "Saturday",
-      "sunday": "Sunday"
+      "builtWith": "Built with ❤️ at Cloudflare"
     }
   }
 }

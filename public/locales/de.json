@@ -3,13 +3,12 @@
     "nav": {
       "features": "Funktionen",
       "pricing": "Preise",
-      "artisans": "Künstlerinnen",
       "login": "Anmelden",
       "getStarted": "Loslegen"
     },
     "hero": {
       "title": "Erhöhen Sie Ihre Nagelkunst.",
-      "subtitle": "Die All-in-One-Plattform für Maniküristen zur Verwaltung von Buchungen, Kunden und Treueprogrammen mit mühelosem Stil.",
+      "subtitle": "Die All-in-One-Plattform f��r Maniküristen zur Verwaltung von Buchungen, Kunden und Treueprogrammen mit mühelosem Stil.",
       "cta": "Starten Sie Ihre kostenlose Testversion"
     },
     "features": {
@@ -29,12 +28,6 @@
           "description": "Erstellen Sie Ihr eigenes Belohnungsprogramm, damit Kunden immer wieder kommen und sich wertgeschätzt fühlen."
         }
       }
-    },
-    "artisans": {
-      "title": "Vorgestellte Künstlerinnen",
-      "subtitle": "Entdecken Sie talentierte Nagelkünstlerinnen auf der Glo-Plattform.",
-      "reviews": "({{count}} Bewertungen)",
-      "cta": "Profil ansehen & Buchen"
     },
     "pricing": {
       "title": "Einfache, transparente Preise.",
@@ -58,32 +51,5 @@
     "footer": {
       "builtWith": "Mit ❤️ bei Cloudflare erstellt"
     }
-  },
-  "services": {
-    "title": "Dienste verwalten",
-    "addService": "Dienst hinzufügen",
-    "editService": "Dienst bearbeiten",
-    "deleteService": "Dienst löschen",
-    "noServices": "Noch keine Dienste",
-    "noServicesDescription": "Beginnen Sie, indem Sie Ihren ersten Dienst hinzufügen.",
-    "name": "Name",
-    "duration": "Dauer",
-    "price": "Preis",
-    "actions": "Aktionen",
-    "addDialogTitle": "Einen neuen Dienst hinzufügen",
-    "editDialogTitle": "Dienst bearbeiten",
-    "deleteDialogTitle": "Sind Sie sicher?",
-    "deleteDialogDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird den Dienst \"{{serviceName}}\" dauerhaft löschen.",
-    "deleteDialogCancel": "Abbrechen",
-    "deleteDialogConfirm": "Löschen",
-    "deleting": "Wird gelöscht...",
-    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten.",
-    "createSuccess": "Dienst erfolgreich erstellt.",
-    "updateSuccess": "Dienst erfolgreich aktualisiert.",
-    "deleteSuccess": "Dienst erfolgreich gelöscht.",
-    "deleteError": "Fehler beim Löschen des Dienstes.",
-    "loadError": "Fehler beim Laden der Dienste",
-    "durationValue": "{{duration}} Min",
-    "openMenu": "Menü öffnen"
   }
 }
