@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore, UserRole } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { GloLogo } from '@/components/GloLogo';
 import { Toaster, toast } from 'sonner';
-import { Separator } from '@/components/ui/separator';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -144,6 +143,14 @@ export function LoginPage() {
             Sign in with Google
           </Button>
         </CardContent>
+        <CardFooter>
+          <p className="text-center text-sm text-muted-foreground w-full">
+            Don't have an account?{' '}
+            <Link to="/register" className="underline text-brand-rose hover:text-brand-rose/80">
+              Sign up
+            </Link>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );

@@ -15,6 +15,7 @@ import '@/i18n'; // Initialize i18n
 import '@/index.css'
 import { HomePage } from '@/pages/HomePage';
 import { LoginPage } from '@/pages/LoginPage';
+import { RegisterPage } from '@/pages/RegisterPage';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AppShell } from '@/components/AppShell';
 import { DashboardPage } from '@/pages/DashboardPage';
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {

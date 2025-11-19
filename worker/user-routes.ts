@@ -35,6 +35,10 @@ const subscriptionUpdateSchema = z.object({
     plan: z.enum(['solo_artist']),
     status: z.enum(['active', 'cancelled', 'past_due']),
 });
+const clientSchema = z.object({
+    name: z.string().min(2, "Name is required"),
+    email: z.string().email("Invalid email address"),
+});
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
   // Seed mock data for demo
   app.use('*', async (c, next) => {
@@ -148,6 +152,15 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
       };
     });
     return ok(c, enrichedClients);
+  });
+  app.post('/api/clients', zValidator('json', clientSchema), async (c) => {
+    const clientData = c.req.valid('json');
+    const newClient = { 
+      id: crypto.randomUUID(), 
+      manicuristId: 'mock-manicurist-id', // Assign to a default manicurist for now
+      ...clientData 
+    };
+    return ok(c, await ClientEntity.create(c.env, newClient));
   });
   // REWARDS
   app.get('/api/rewards', async (c) => ok(c, (await RewardsProgramEntity.list(c.env)).items));
