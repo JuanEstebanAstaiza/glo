@@ -14,6 +14,8 @@ import { RouteErrorBoundary } from '@/components/RouteErrorBoundary';
 import '@/i18n'; // Initialize i18n
 import '@/index.css'
 import { HomePage } from '@/pages/HomePage'
+import { LoginPage } from '@/pages/LoginPage';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { AppShell } from '@/components/AppShell';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ServicesPage } from '@/pages/ServicesPage';
@@ -34,32 +36,41 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorBoundary />,
   },
   {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <RouteErrorBoundary />,
+  },
+  {
     path: "/book/:manicuristId",
     element: <PublicBookingPage />,
     errorElement: <RouteErrorBoundary />,
   },
   {
-    path: "/",
-    element: <AppShell />,
+    element: <ProtectedRoute />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      { path: "dashboard", element: <DashboardPage /> },
-      { path: "services", element: <ServicesPage /> },
-      { path: "schedule", element: <SchedulePage /> },
-      { path: "appointments", element: <AppointmentsPage /> },
-      { path: "rewards", element: <RewardsPage /> },
-      { path: "clients", element: <ClientsPage /> },
-    ]
-  },
-  {
-    path: "/admin",
-    element: <AdminShell />,
-    errorElement: <RouteErrorBoundary />,
-    children: [
-      { index: true, element: <Navigate to="/admin/dashboard" replace /> },
-      { path: "dashboard", element: <AdminDashboardPage /> },
-      { path: "manicurists", element: <AdminManicuristsPage /> },
-      { path: "settings", element: <AdminSettingsPage /> },
+      {
+        path: "/",
+        element: <AppShell />,
+        children: [
+          { path: "dashboard", element: <DashboardPage /> },
+          { path: "services", element: <ServicesPage /> },
+          { path: "schedule", element: <SchedulePage /> },
+          { path: "appointments", element: <AppointmentsPage /> },
+          { path: "rewards", element: <RewardsPage /> },
+          { path: "clients", element: <ClientsPage /> },
+        ]
+      },
+      {
+        path: "/admin",
+        element: <AdminShell />,
+        children: [
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+          { path: "dashboard", element: <AdminDashboardPage /> },
+          { path: "manicurists", element: <AdminManicuristsPage /> },
+          { path: "settings", element: <AdminSettingsPage /> },
+        ]
+      },
     ]
   },
   {
