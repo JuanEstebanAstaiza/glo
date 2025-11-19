@@ -26,10 +26,10 @@ const serviceFormSchema = z.object({
     message: 'Service name must be at least 2 characters.',
   }),
   description: z.string().optional(),
-  duration: z.coerce.number().int().positive({
+  duration: z.coerce.number({ invalid_type_error: 'Please enter a number.' }).int().positive({
     message: 'Duration must be a positive number of minutes.',
   }),
-  price: z.coerce.number().int().min(0, {
+  price: z.coerce.number({ invalid_type_error: 'Please enter a number.' }).int().min(0, {
     message: 'Price cannot be negative.',
   }),
   currency: z.enum(['USD', 'EUR', 'GBP', 'JPY']),
@@ -50,6 +50,7 @@ export function ServiceForm({ onSubmit, defaultValues, isSubmitting }: ServiceFo
       price: 5000, // Default to $50.00
       currency: 'USD',
       ...defaultValues,
+      price: defaultValues?.price, // Keep price in cents
     },
   });
   return (

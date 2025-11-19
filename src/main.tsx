@@ -16,6 +16,7 @@ import { HomePage } from '@/pages/HomePage'
 import { AppShell } from '@/components/AppShell';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ServicesPage } from '@/pages/ServicesPage';
+import { SchedulePage } from '@/pages/SchedulePage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -30,8 +31,8 @@ const router = createBrowserRouter([
     children: [
       { path: "dashboard", element: <DashboardPage /> },
       { path: "services", element: <ServicesPage /> },
+      { path: "schedule", element: <SchedulePage /> },
       // Placeholder routes
-      { path: "schedule", element: <div>Schedule Page</div> },
       { path: "clients", element: <div>Clients Page</div> },
       { path: "rewards", element: <div>Rewards Page</div> },
     ]

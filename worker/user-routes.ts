@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import type { Env } from './core-utils';
-import { ServiceEntity } from "./entities";
+import { ServiceEntity, AvailabilityEntity } from "./entities";
 import { ok, bad, notFound } from './core-utils';
 const serviceSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -10,6 +10,12 @@ const serviceSchema = z.object({
   duration: z.number().int().positive("Duration must be a positive number"),
   price: z.number().int().min(0, "Price cannot be negative"),
   currency: z.enum(["USD", "EUR", "GBP", "JPY"]),
+});
+const availabilitySchema = z.object({
+    dayOfWeek: z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
+    startTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format, expected HH:mm"),
+    endTime: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format, expected HH:mm"),
+    isEnabled: z.boolean(),
 });
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
   // SERVICES
@@ -62,4 +68,31 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     }
     return ok(c, { id, deleted });
   });
+  // AVAILABILITY
+  app.get('/api/availability', async (c) => {
+    // In a real app, you'd filter by manicuristId
+    const page = await AvailabilityEntity.list(c.env);
+    return ok(c, page.items);
+  });
+  app.put(
+    '/api/availability',
+    zValidator('json', z.array(availabilitySchema)),
+    async (c) => {
+        const availabilityData = c.req.valid('json');
+        const manicuristId = 'mock-manicurist-id'; // Replace with actual authenticated user ID
+        const updatedAvailabilities = await Promise.all(
+            availabilityData.map(async (avail) => {
+                const id = `${manicuristId}-${avail.dayOfWeek}`;
+                const entity = new AvailabilityEntity(c.env, id);
+                const dataToStore = { ...avail, id, manicuristId };
+                if (await entity.exists()) {
+                    return await entity.mutate(() => dataToStore);
+                } else {
+                    return await AvailabilityEntity.create(c.env, dataToStore);
+                }
+            })
+        );
+        return ok(c, updatedAvailabilities);
+    }
+  );
 }
