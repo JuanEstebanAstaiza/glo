@@ -58,7 +58,7 @@ export function HomePage() {
             </Link>
             <nav className="hidden md:flex items-center space-x-8">
               <a href="#features" className="font-medium hover:text-brand-rose transition-colors">{t('landing.nav.features')}</a>
-              <a href="#artisans" className="font-medium hover:text-brand-rose transition-colors">Artisans</a>
+              <a href="#artisans" className="font-medium hover:text-brand-rose transition-colors">{t('landing.nav.artisans')}</a>
               <a href="#pricing" className="font-medium hover:text-brand-rose transition-colors">{t('landing.nav.pricing')}</a>
             </nav>
             <div className="flex items-center gap-2">
@@ -114,8 +114,8 @@ export function HomePage() {
         <section id="artisans" className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold">Featured Artisans</h2>
-              <p className="mt-4 max-w-2xl mx-auto text-lg text-brand-charcoal/70">Discover talented nail artists on the Glo platform.</p>
+              <h2 className="text-3xl md:text-4xl font-bold">{t('landing.artisans.title')}</h2>
+              <p className="mt-4 max-w-2xl mx-auto text-lg text-brand-charcoal/70">{t('landing.artisans.subtitle')}</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {isLoadingManicurists ? (
@@ -130,10 +130,10 @@ export function HomePage() {
                       <CardHeader><CardTitle>{artisan.name}</CardTitle></CardHeader>
                       <CardContent className="space-y-4">
                         <div className="flex justify-center items-center text-sm text-brand-charcoal/70">
-                          <Star className="h-4 w-4 mr-1 text-yellow-500 fill-yellow-500" /> 5.0 (24 reviews)
+                          <Star className="h-4 w-4 mr-1 text-yellow-500 fill-yellow-500" /> 5.0 {t('landing.artisans.reviews', { count: 24 })}
                         </div>
                         <Button asChild variant="outline">
-                          <Link to={`/book/${artisan.id}`}>View Profile & Book</Link>
+                          <Link to={`/book/${artisan.id}`}>{t('landing.artisans.cta')}</Link>
                         </Button>
                       </CardContent>
                     </Card>
