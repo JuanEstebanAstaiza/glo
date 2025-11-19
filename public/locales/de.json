@@ -8,7 +8,7 @@
     },
     "hero": {
       "title": "Erhöhen Sie Ihre Nagelkunst.",
-      "subtitle": "Die All-in-One-Plattform f��r Maniküristen zur Verwaltung von Buchungen, Kunden und Treueprogrammen mit mühelosem Stil.",
+      "subtitle": "Die All-in-One-Plattform für Maniküristen zur Verwaltung von Buchungen, Kunden und Treueprogrammen mit mühelosem Stil.",
       "cta": "Starten Sie Ihre kostenlose Testversion"
     },
     "features": {
@@ -51,5 +51,24 @@
     "footer": {
       "builtWith": "Mit ❤️ bei Cloudflare erstellt"
     }
+  },
+  "services": {
+    "title": "Dienste verwalten",
+    "addService": "Dienst hinzufügen",
+    "editService": "Dienst bearbeiten",
+    "deleteService": "Dienst löschen",
+    "noServices": "Noch keine Dienste",
+    "noServicesDescription": "Beginnen Sie, indem Sie Ihren ersten Dienst hinzufügen.",
+    "name": "Name",
+    "duration": "Dauer",
+    "price": "Preis",
+    "actions": "Aktionen",
+    "addDialogTitle": "Einen neuen Dienst hinzufügen",
+    "editDialogTitle": "Dienst bearbeiten",
+    "deleteDialogTitle": "Sind Sie sicher?",
+    "deleteDialogDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird den Dienst \"{{serviceName}}\" dauerhaft löschen.",
+    "deleteDialogCancel": "Abbrechen",
+    "deleteDialogConfirm": "Löschen",
+    "deleting": "Wird gelöscht..."
   }
 }

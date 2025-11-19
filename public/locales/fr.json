@@ -8,7 +8,7 @@
     },
     "hero": {
       "title": "Élevez votre Art de l'Ongle.",
-      "subtitle": "La plateforme tout-en-un pour les manucures pour gérer les réservations, les clients et les programmes de fid��lité avec un style sans effort.",
+      "subtitle": "La plateforme tout-en-un pour les manucures pour gérer les réservations, les clients et les programmes de fidélité avec un style sans effort.",
       "cta": "Commencez votre Essai Gratuit"
     },
     "features": {
@@ -51,5 +51,24 @@
     "footer": {
       "builtWith": "Construit avec ❤️ chez Cloudflare"
     }
+  },
+  "services": {
+    "title": "Gérer les Services",
+    "addService": "Ajouter un Service",
+    "editService": "Modifier le Service",
+    "deleteService": "Supprimer le Service",
+    "noServices": "Aucun service pour le moment",
+    "noServicesDescription": "Commencez par ajouter votre premier service.",
+    "name": "Nom",
+    "duration": "Durée",
+    "price": "Prix",
+    "actions": "Actions",
+    "addDialogTitle": "Ajouter un Nouveau Service",
+    "editDialogTitle": "Modifier le Service",
+    "deleteDialogTitle": "Êtes-vous sûr ?",
+    "deleteDialogDescription": "Cette action est irréversible. Cela supprimera définitivement le service \"{{serviceName}}\".",
+    "deleteDialogCancel": "Annuler",
+    "deleteDialogConfirm": "Supprimer",
+    "deleting": "Suppression en cours..."
   }
 }
