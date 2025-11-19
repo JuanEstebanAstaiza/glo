@@ -65,14 +65,14 @@ export function ServicesPage() {
       setSelectedService(null);
     },
     onError: (err: Error) => {
-      toast.error(err.message || 'An unexpected error occurred.');
+      toast.error(err.message || t('services.unexpectedError'));
     },
   };
   const createMutation = useMutation({
     mutationFn: (newService: Omit<Service, 'id' | 'manicuristId'>) => api<Service>('/api/services', { method: 'POST', body: JSON.stringify(newService) }),
     ...mutationOptions,
     onSuccess: () => {
-      toast.success('Service created successfully!');
+      toast.success(t('services.createSuccess'));
       mutationOptions.onSuccess();
     },
   });
@@ -80,7 +80,7 @@ export function ServicesPage() {
     mutationFn: (updatedService: Partial<Service> & { id: string }) => api<Service>(`/api/services/${updatedService.id}`, { method: 'PUT', body: JSON.stringify(updatedService) }),
     ...mutationOptions,
     onSuccess: () => {
-      toast.success('Service updated successfully!');
+      toast.success(t('services.updateSuccess'));
       mutationOptions.onSuccess();
     },
   });
@@ -88,12 +88,12 @@ export function ServicesPage() {
     mutationFn: (serviceId: string) => api(`/api/services/${serviceId}`, { method: 'DELETE' }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['services'] });
-      toast.success('Service deleted successfully!');
+      toast.success(t('services.deleteSuccess'));
       setAlertOpen(false);
       setSelectedService(null);
     },
     onError: (err: Error) => {
-      toast.error(err.message || 'Failed to delete service.');
+      toast.error(err.message || t('services.deleteError'));
     },
   });
   const handleFormSubmit = (values: any) => {
@@ -146,7 +146,7 @@ export function ServicesPage() {
           </div>
         ) : error ? (
           <div className="p-8 text-center text-red-600">
-            Failed to load services: {error.message}
+            {t('services.loadError')}: {error.message}
           </div>
         ) : services && services.length > 0 ? (
           <Table>
@@ -162,13 +162,13 @@ export function ServicesPage() {
               {services.map((service) => (
                 <TableRow key={service.id}>
                   <TableCell className="font-medium">{service.name}</TableCell>
-                  <TableCell>{service.duration} min</TableCell>
+                  <TableCell>{t('services.durationValue', { duration: service.duration })}</TableCell>
                   <TableCell>{formatCurrency(service.price, service.currency)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
+                          <span className="sr-only">{t('services.openMenu')}</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>

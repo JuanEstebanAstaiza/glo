@@ -35,7 +35,7 @@
       "plans": {
         "solo": {
           "title": "Artista Solista",
-          "price": "€29",
+          "price": "��29",
           "period": "/ mes",
           "features": [
             "Servicios Ilimitados",
@@ -54,7 +54,7 @@
   },
   "services": {
     "title": "Gestionar Servicios",
-    "addService": "A��adir Servicio",
+    "addService": "Añadir Servicio",
     "editService": "Editar Servicio",
     "deleteService": "Eliminar Servicio",
     "noServices": "Aún no hay servicios",
@@ -69,6 +69,14 @@
     "deleteDialogDescription": "Esta acción no se puede deshacer. Esto eliminará permanentemente el servicio \"{{serviceName}}\".",
     "deleteDialogCancel": "Cancelar",
     "deleteDialogConfirm": "Eliminar",
-    "deleting": "Eliminando..."
+    "deleting": "Eliminando...",
+    "unexpectedError": "Ocurrió un error inesperado.",
+    "createSuccess": "Servicio creado con éxito.",
+    "updateSuccess": "Servicio actualizado con éxito.",
+    "deleteSuccess": "Servicio eliminado con éxito.",
+    "deleteError": "Error al eliminar el servicio.",
+    "loadError": "Error al cargar los servicios",
+    "durationValue": "{{duration}} min",
+    "openMenu": "Abrir menú"
   }
 }

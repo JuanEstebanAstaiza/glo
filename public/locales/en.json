@@ -69,6 +69,14 @@
     "deleteDialogDescription": "This action cannot be undone. This will permanently delete the service \"{{serviceName}}\".",
     "deleteDialogCancel": "Cancel",
     "deleteDialogConfirm": "Delete",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "unexpectedError": "An unexpected error occurred.",
+    "createSuccess": "Service created successfully.",
+    "updateSuccess": "Service updated successfully.",
+    "deleteSuccess": "Service deleted successfully.",
+    "deleteError": "Failed to delete service.",
+    "loadError": "Failed to load services",
+    "durationValue": "{{duration}} min",
+    "openMenu": "Open menu"
   }
 }

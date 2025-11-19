@@ -69,6 +69,14 @@
     "deleteDialogDescription": "Diese Aktion kann nicht rückgängig gemacht werden. Dies wird den Dienst \"{{serviceName}}\" dauerhaft löschen.",
     "deleteDialogCancel": "Abbrechen",
     "deleteDialogConfirm": "Löschen",
-    "deleting": "Wird gelöscht..."
+    "deleting": "Wird gelöscht...",
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten.",
+    "createSuccess": "Dienst erfolgreich erstellt.",
+    "updateSuccess": "Dienst erfolgreich aktualisiert.",
+    "deleteSuccess": "Dienst erfolgreich gelöscht.",
+    "deleteError": "Fehler beim Löschen des Dienstes.",
+    "loadError": "Fehler beim Laden der Dienste",
+    "durationValue": "{{duration}} Min",
+    "openMenu": "Menü öffnen"
   }
 }

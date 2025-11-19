@@ -69,6 +69,14 @@
     "deleteDialogDescription": "Cette action est irréversible. Cela supprimera définitivement le service \"{{serviceName}}\".",
     "deleteDialogCancel": "Annuler",
     "deleteDialogConfirm": "Supprimer",
-    "deleting": "Suppression en cours..."
+    "deleting": "Suppression en cours...",
+    "unexpectedError": "Une erreur inattendue est survenue.",
+    "createSuccess": "Service créé avec succès.",
+    "updateSuccess": "Service mis à jour avec succès.",
+    "deleteSuccess": "Service supprimé avec succès.",
+    "deleteError": "Échec de la suppression du service.",
+    "loadError": "Échec du chargement des services",
+    "durationValue": "{{duration}} min",
+    "openMenu": "Ouvrir le menu"
   }
 }
