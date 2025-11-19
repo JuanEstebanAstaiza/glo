@@ -1,0 +1,55 @@
+{
+  "landing": {
+    "nav": {
+      "features": "Funktionen",
+      "pricing": "Preise",
+      "login": "Anmelden",
+      "getStarted": "Loslegen"
+    },
+    "hero": {
+      "title": "Erhöhen Sie Ihre Nagelkunst.",
+      "subtitle": "Die All-in-One-Plattform f��r Maniküristen zur Verwaltung von Buchungen, Kunden und Treueprogrammen mit mühelosem Stil.",
+      "cta": "Starten Sie Ihre kostenlose Testversion"
+    },
+    "features": {
+      "title": "Alles, was Sie brauchen, perfekt poliert.",
+      "subtitle": "Glo bietet die Werkzeuge, um Ihr Geschäft zu optimieren, damit Sie sich auf das konzentrieren können, was Sie lieben – schöne Nägel zu kreieren.",
+      "list": {
+        "services": {
+          "title": "Dienstleistungsmanagement",
+          "description": "Erstellen und verwalten Sie einfach Ihr Dienstleistungsmenü mit Beschreibungen, Dauern und Preisen."
+        },
+        "scheduling": {
+          "title": "Intelligente Terminplanung",
+          "description": "Legen Sie Ihre Verfügbarkeit fest und lassen Sie Kunden rund um die Uhr online Termine buchen, wodurch das Hin und Her von Nachrichten entfällt."
+        },
+        "loyalty": {
+          "title": "Kundenbindung",
+          "description": "Erstellen Sie Ihr eigenes Belohnungsprogramm, damit Kunden immer wieder kommen und sich wertgeschätzt fühlen."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Einfache, transparente Preise.",
+      "subtitle": "Wählen Sie den für Sie passenden Plan. Keine versteckten Gebühren, niemals.",
+      "plans": {
+        "solo": {
+          "title": "Solokünstler",
+          "price": "€29",
+          "period": "/ Monat",
+          "features": [
+            "Unbegrenzte Dienstleistungen",
+            "Unbegrenzte Termine",
+            "Kundenmanagement",
+            "Treueprogramm",
+            "Online-Buchungsseite"
+          ],
+          "cta": "Plan wählen"
+        }
+      }
+    },
+    "footer": {
+      "builtWith": "Mit ❤️ bei Cloudflare erstellt"
+    }
+  }
+}

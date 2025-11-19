@@ -77,10 +77,7 @@ function updateWranglerJsonc() {
 }
 
 function runSetupCommands() {
-    const commands = [
-    "bun install @hono/zod-validator",
-    "bun install i18next react-i18next i18next-browser-languagedetector i18next-http-backend"
-];
+    const commands = [];
     
     if (commands.length === 0) {
         console.log('⊘ No setup commands to run');

@@ -1,0 +1,55 @@
+{
+  "landing": {
+    "nav": {
+      "features": "Características",
+      "pricing": "Precios",
+      "login": "Iniciar Sesión",
+      "getStarted": "Comenzar"
+    },
+    "hero": {
+      "title": "Eleva tu Arte en Uñas.",
+      "subtitle": "La plataforma todo en uno para manicuristas para gestionar reservas, clientes y programas de lealtad con un estilo sin esfuerzo.",
+      "cta": "Comienza tu Prueba Gratuita"
+    },
+    "features": {
+      "title": "Todo lo que necesitas, perfectamente pulido.",
+      "subtitle": "Glo proporciona las herramientas para optimizar tu negocio, para que puedas concentrarte en lo que amas: crear uñas hermosas.",
+      "list": {
+        "services": {
+          "title": "Gestión de Servicios",
+          "description": "Crea y gestiona fácilmente tu menú de servicios, con descripciones, duraciones y precios."
+        },
+        "scheduling": {
+          "title": "Programación Inteligente",
+          "description": "Establece tu disponibilidad y deja que los clientes reserven citas en línea 24/7, eliminando los mensajes de ida y vuelta."
+        },
+        "loyalty": {
+          "title": "Lealtad del Cliente",
+          "description": "Crea tu propio programa de recompensas para que los clientes sigan volviendo y se sientan apreciados."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Precios simples y transparentes.",
+      "subtitle": "Elige el plan adecuado para ti. Sin cargos ocultos, nunca.",
+      "plans": {
+        "solo": {
+          "title": "Artista Solista",
+          "price": "€29",
+          "period": "/ mes",
+          "features": [
+            "Servicios Ilimitados",
+            "Citas Ilimitadas",
+            "Gestión de Clientes",
+            "Programa de Lealtad",
+            "Página de Reservas Online"
+          ],
+          "cta": "Elegir Plan"
+        }
+      }
+    },
+    "footer": {
+      "builtWith": "Construido con ❤️ en Cloudflare"
+    }
+  }
+}

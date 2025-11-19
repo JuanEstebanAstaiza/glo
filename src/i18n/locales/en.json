@@ -1,0 +1,55 @@
+{
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "login": "Login",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "title": "Elevate Your Nail Artistry.",
+      "subtitle": "The all-in-one platform for manicurists to manage bookings, clients, and loyalty programs with effortless style.",
+      "cta": "Start Your Free Trial"
+    },
+    "features": {
+      "title": "Everything you need, perfectly polished.",
+      "subtitle": "Glo provides the tools to streamline your business, so you can focus on what you love—creating beautiful nails.",
+      "list": {
+        "services": {
+          "title": "Service Management",
+          "description": "Easily create and manage your menu of services, complete with descriptions, durations, and pricing."
+        },
+        "scheduling": {
+          "title": "Smart Scheduling",
+          "description": "Set your availability and let clients book appointments online 24/7, eliminating back-and-forth messages."
+        },
+        "loyalty": {
+          "title": "Client Loyalty",
+          "description": "Build your own rewards program to keep clients coming back and feeling appreciated."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Simple, transparent pricing.",
+      "subtitle": "Choose the plan that's right for you. No hidden fees, ever.",
+      "plans": {
+        "solo": {
+          "title": "Solo Artist",
+          "price": "$29",
+          "period": "/ month",
+          "features": [
+            "Unlimited Services",
+            "Unlimited Appointments",
+            "Client Management",
+            "Loyalty Program",
+            "Online Booking Page"
+          ],
+          "cta": "Choose Plan"
+        }
+      }
+    },
+    "footer": {
+      "builtWith": "Built with ❤️ at Cloudflare"
+    }
+  }
+}

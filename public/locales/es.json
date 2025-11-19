@@ -1,0 +1,122 @@
+{
+  "landing": {
+    "nav": {
+      "features": "Características",
+      "pricing": "Precios",
+      "artisans": "Artesanas",
+      "login": "Iniciar Sesión",
+      "getStarted": "Comenzar"
+    },
+    "hero": {
+      "title": "Eleva tu Arte en Uñas.",
+      "subtitle": "La plataforma todo en uno para manicuristas para gestionar reservas, clientes y programas de lealtad con un estilo sin esfuerzo.",
+      "cta": "Comienza tu Prueba Gratuita"
+    },
+    "features": {
+      "title": "Todo lo que necesitas, perfectamente pulido.",
+      "subtitle": "Glo proporciona las herramientas para optimizar tu negocio, para que puedas concentrarte en lo que amas: crear uñas hermosas.",
+      "list": {
+        "services": {
+          "title": "Gestión de Servicios",
+          "description": "Crea y gestiona fácilmente tu menú de servicios, con descripciones, duraciones y precios."
+        },
+        "scheduling": {
+          "title": "Programación Inteligente",
+          "description": "Establece tu disponibilidad y deja que los clientes reserven citas en línea 24/7, eliminando los mensajes de ida y vuelta."
+        },
+        "loyalty": {
+          "title": "Lealtad del Cliente",
+          "description": "Crea tu propio programa de recompensas para que los clientes sigan volviendo y se sientan apreciados."
+        }
+      }
+    },
+    "artisans": {
+      "title": "Artesanas Destacadas",
+      "subtitle": "Descubre talentosas artistas de uñas en la plataforma Glo.",
+      "reviews": "({{count}} reseñas)",
+      "cta": "Ver Perfil y Reservar"
+    },
+    "pricing": {
+      "title": "Precios simples y transparentes.",
+      "subtitle": "Elige el plan adecuado para ti. Sin cargos ocultos, nunca.",
+      "plans": {
+        "solo": {
+          "title": "Artista Solista",
+          "price": "€29",
+          "period": "/ mes",
+          "features": [
+            "Servicios Ilimitados",
+            "Citas Ilimitadas",
+            "Gestión de Clientes",
+            "Programa de Lealtad",
+            "Página de Reservas Online"
+          ],
+          "cta": "Elegir Plan"
+        }
+      }
+    },
+    "footer": {
+      "builtWith": "Construido con ❤️ en Cloudflare"
+    }
+  },
+  "services": {
+    "title": "Gestionar Servicios",
+    "addService": "Añadir Servicio",
+    "editService": "Editar Servicio",
+    "deleteService": "Eliminar Servicio",
+    "noServices": "Aún no hay servicios",
+    "noServicesDescription": "Comienza añadiendo tu primer servicio.",
+    "name": "Nombre",
+    "duration": "Duración",
+    "price": "Precio",
+    "actions": "Acciones",
+    "addDialogTitle": "Añadir un Nuevo Servicio",
+    "editDialogTitle": "Editar Servicio",
+    "deleteDialogTitle": "¿Estás seguro?",
+    "deleteDialogDescription": "Esta acción no se puede deshacer. Esto eliminará permanentemente el servicio \"{{serviceName}}\".",
+    "deleteDialogCancel": "Cancelar",
+    "deleteDialogConfirm": "Eliminar",
+    "deleting": "Eliminando...",
+    "unexpectedError": "Ocurrió un error inesperado.",
+    "createSuccess": "Servicio creado con éxito.",
+    "updateSuccess": "Servicio actualizado con éxito.",
+    "deleteSuccess": "Servicio eliminado con éxito.",
+    "deleteError": "Error al eliminar el servicio.",
+    "loadError": "Error al cargar los servicios",
+    "durationValue": "{{duration}} min",
+    "openMenu": "Abrir menú"
+  },
+  "sidebar": {
+    "template": "Plantilla",
+    "search": "Buscar",
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "explore": "Explorar",
+    "quickLinks": "Enlaces Rápidos",
+    "starred": "Destacados",
+    "support": "Soporte",
+    "settings": "Ajustes",
+    "footer": "Una barra lateral simple de shadcn"
+  },
+  "schedule": {
+    "title": "Mi Horario",
+    "editAvailability": "Editar Disponibilidad",
+    "editWeeklyAvailability": "Editar Disponibilidad Semanal",
+    "weeklyAvailability": "Disponibilidad Semanal",
+    "weeklyAvailabilityDescription": "Tus horas semanales est��ndar.",
+    "unavailable": "No disponible",
+    "updateSuccess": "Disponibilidad actualizada con éxito.",
+    "updateError": "Error al actualizar la disponibilidad.",
+    "loadError": "Error al cargar los datos de disponibilidad.",
+    "loadingForm": "Cargando formulario...",
+    "days": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    }
+  }
+}
