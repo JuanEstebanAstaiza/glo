@@ -116,7 +116,30 @@ export function userRoutes(app: Hono<{ Bindings: Env }>) {
     return ok(c, await AppointmentEntity.create(c.env, newAppointment));
   });
   // CLIENTS
-  app.get('/api/clients', async (c) => ok(c, (await ClientEntity.list(c.env)).items));
+  app.get('/api/clients', async (c) => {
+    const manicuristId = 'mock-manicurist-id';
+    const [clients, appointments, rewardsPrograms] = await Promise.all([
+      ClientEntity.list(c.env),
+      AppointmentEntity.list(c.env),
+      RewardsProgramEntity.list(c.env),
+    ]);
+    const rewardsProgram = rewardsPrograms.items.find(p => p.manicuristId === manicuristId);
+    const enrichedClients = clients.items.map(client => {
+      const clientAppointments = appointments.items.filter(a => a.clientId === client.id && a.status === 'completed');
+      const totalAppointments = clientAppointments.length;
+      let loyaltyProgress = 0;
+      if (rewardsProgram) {
+        loyaltyProgress = totalAppointments % rewardsProgram.targetAppointments;
+      }
+      return {
+        ...client,
+        totalAppointments,
+        loyaltyProgress: rewardsProgram ? loyaltyProgress : undefined,
+        targetAppointments: rewardsProgram ? rewardsProgram.targetAppointments : undefined,
+      };
+    });
+    return ok(c, enrichedClients);
+  });
   // REWARDS
   app.get('/api/rewards', async (c) => ok(c, (await RewardsProgramEntity.list(c.env)).items));
   app.post('/api/rewards', zValidator('json', rewardsProgramSchema), async (c) => {

@@ -24,9 +24,12 @@ export interface Client {
   name: string;
   email: string;
   manicuristId: string; // Link to their specific manicurist
+  loyaltyProgress?: number;
+  totalAppointments?: number;
+  targetAppointments?: number;
 }
 export interface Appointment {
-  id: string;
+  id:string;
   clientId: string;
   manicuristId: string;
   serviceId: string;
