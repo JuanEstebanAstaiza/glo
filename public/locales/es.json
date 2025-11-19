@@ -51,5 +51,24 @@
     "footer": {
       "builtWith": "Construido con ❤️ en Cloudflare"
     }
+  },
+  "services": {
+    "title": "Gestionar Servicios",
+    "addService": "A��adir Servicio",
+    "editService": "Editar Servicio",
+    "deleteService": "Eliminar Servicio",
+    "noServices": "Aún no hay servicios",
+    "noServicesDescription": "Comienza añadiendo tu primer servicio.",
+    "name": "Nombre",
+    "duration": "Duración",
+    "price": "Precio",
+    "actions": "Acciones",
+    "addDialogTitle": "Añadir un Nuevo Servicio",
+    "editDialogTitle": "Editar Servicio",
+    "deleteDialogTitle": "¿Estás seguro?",
+    "deleteDialogDescription": "Esta acción no se puede deshacer. Esto eliminará permanentemente el servicio \"{{serviceName}}\".",
+    "deleteDialogCancel": "Cancelar",
+    "deleteDialogConfirm": "Eliminar",
+    "deleting": "Eliminando..."
   }
 }
