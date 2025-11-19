@@ -18,6 +18,8 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { ServicesPage } from '@/pages/ServicesPage';
 import { SchedulePage } from '@/pages/SchedulePage';
 import { PublicBookingPage } from '@/pages/PublicBookingPage';
+import { AppointmentsPage } from '@/pages/AppointmentsPage';
+import { RewardsPage } from '@/pages/RewardsPage';
 const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
@@ -38,9 +40,10 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <DashboardPage /> },
       { path: "services", element: <ServicesPage /> },
       { path: "schedule", element: <SchedulePage /> },
+      { path: "appointments", element: <AppointmentsPage /> },
+      { path: "rewards", element: <RewardsPage /> },
       // Placeholder routes
       { path: "clients", element: <div>Clients Page</div> },
-      { path: "rewards", element: <div>Rewards Page</div> },
     ]
   },
   {

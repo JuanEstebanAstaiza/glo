@@ -2,10 +2,9 @@ import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import type { Env } from './core-utils';
-import { ServiceEntity, AvailabilityEntity, AppointmentEntity } from "./entities";
+import { ServiceEntity, AvailabilityEntity, AppointmentEntity, RewardsProgramEntity, ClientEntity } from "./entities";
 import { ok, bad, notFound } from './core-utils';
-import { Index } from './core-utils';
-import { parse, format, addMinutes, isBefore, isEqual, set } from 'date-fns';
+import { parse, format, addMinutes, isBefore, isEqual } from 'date-fns';
 const serviceSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional().default(""),
@@ -24,114 +23,111 @@ const appointmentSchema = z.object({
     serviceId: z.string(),
     startTime: z.string().datetime(),
 });
+const rewardsProgramSchema = z.object({
+    name: z.string().min(2),
+    targetAppointments: z.number().int().positive(),
+    rewardDescription: z.string().min(5),
+});
 export function userRoutes(app: Hono<{ Bindings: Env }>) {
-  // SERVICES
-  app.get('/api/services', async (c) => {
-    const page = await ServiceEntity.list(c.env);
-    return ok(c, page.items);
+  // Seed mock clients for demo
+  app.use('*', async (c, next) => {
+    await ClientEntity.ensureSeed(c.env);
+    await next();
   });
+  // SERVICES
+  app.get('/api/services', async (c) => ok(c, (await ServiceEntity.list(c.env)).items));
   app.post('/api/services', zValidator('json', serviceSchema), async (c) => {
     const serviceData = c.req.valid('json');
     const newService = { id: crypto.randomUUID(), manicuristId: 'mock-manicurist-id', ...serviceData };
-    const created = await ServiceEntity.create(c.env, newService);
-    return ok(c, created);
+    return ok(c, await ServiceEntity.create(c.env, newService));
   });
   app.get('/api/services/:id', async (c) => {
-    const { id } = c.req.param();
-    const service = new ServiceEntity(c.env, id);
+    const service = new ServiceEntity(c.env, c.req.param('id'));
     if (!(await service.exists())) return notFound(c, 'Service not found');
     return ok(c, await service.getState());
   });
   app.put('/api/services/:id', zValidator('json', serviceSchema.partial()), async (c) => {
     const { id } = c.req.param();
-    const serviceUpdates = c.req.valid('json');
     const service = new ServiceEntity(c.env, id);
     if (!(await service.exists())) return notFound(c, 'Service not found');
-    const updated = await service.mutate(current => ({ ...current, ...serviceUpdates }));
-    return ok(c, updated);
+    return ok(c, await service.mutate(current => ({ ...current, ...c.req.valid('json') })));
   });
   app.delete('/api/services/:id', async (c) => {
-    const { id } = c.req.param();
-    const deleted = await ServiceEntity.delete(c.env, id);
+    const deleted = await ServiceEntity.delete(c.env, c.req.param('id'));
     if (!deleted) return notFound(c, 'Service not found');
-    return ok(c, { id, deleted });
+    return ok(c, { id: c.req.param('id'), deleted });
   });
   // AVAILABILITY
-  app.get('/api/availability', async (c) => {
-    const page = await AvailabilityEntity.list(c.env);
-    return ok(c, page.items);
-  });
+  app.get('/api/availability', async (c) => ok(c, (await AvailabilityEntity.list(c.env)).items));
   app.put('/api/availability', zValidator('json', z.array(availabilitySchema)), async (c) => {
-    const availabilityData = c.req.valid('json');
     const manicuristId = 'mock-manicurist-id';
-    const updatedAvailabilities = await Promise.all(
-        availabilityData.map(async (avail) => {
+    const updated = await Promise.all(
+        c.req.valid('json').map(async (avail) => {
             const id = `${manicuristId}-${avail.dayOfWeek}`;
             const entity = new AvailabilityEntity(c.env, id);
-            const dataToStore = { ...avail, id, manicuristId };
-            if (await entity.exists()) {
-                return await entity.mutate(() => dataToStore);
-            } else {
-                return await AvailabilityEntity.create(c.env, dataToStore);
-            }
+            const data = { ...avail, id, manicuristId };
+            return (await entity.exists()) ? entity.mutate(() => data) : AvailabilityEntity.create(c.env, data);
         })
     );
-    return ok(c, updatedAvailabilities);
+    return ok(c, updated);
   });
-  // BOOKING
+  // BOOKING & APPOINTMENTS
   app.get('/api/availability/:manicuristId/slots', async (c) => {
     const { manicuristId } = c.req.param();
-    const date = c.req.query('date'); // e.g., '2024-08-15'
-    const serviceId = c.req.query('serviceId');
+    const { date, serviceId } = c.req.query();
     if (!date || !serviceId) return bad(c, 'Date and Service ID are required.');
-    const serviceEntity = new ServiceEntity(c.env, serviceId);
-    if (!await serviceEntity.exists()) return notFound(c, 'Service not found');
-    const service = await serviceEntity.getState();
-    const serviceDuration = service.duration;
+    const service = await new ServiceEntity(c.env, serviceId).getState();
+    if (!service.id) return notFound(c, 'Service not found');
     const targetDate = new Date(date);
-    const dayOfWeek = format(targetDate, 'eeee').toLowerCase() as ReturnType<typeof availabilitySchema.parse>['dayOfWeek'];
-    const availabilityId = `${manicuristId}-${dayOfWeek}`;
-    const availabilityEntity = new AvailabilityEntity(c.env, availabilityId);
-    if (!await availabilityEntity.exists()) return ok(c, []);
-    const availability = await availabilityEntity.getState();
+    const dayOfWeek = format(targetDate, 'eeee').toLowerCase() as any;
+    const availability = await new AvailabilityEntity(c.env, `${manicuristId}-${dayOfWeek}`).getState();
     if (!availability.isEnabled || !availability.startTime || !availability.endTime) return ok(c, []);
-    const appointments = await AppointmentEntity.list(c.env);
-    const bookedSlots = appointments.items
+    const appointments = (await AppointmentEntity.list(c.env)).items;
+    const bookedSlots = appointments
       .filter(a => a.manicuristId === manicuristId && format(new Date(a.startTime), 'yyyy-MM-dd') === date)
       .map(a => ({ start: new Date(a.startTime), end: new Date(a.endTime) }));
     const availableSlots: string[] = [];
     const dayStart = parse(availability.startTime, 'HH:mm', targetDate);
     const dayEnd = parse(availability.endTime, 'HH:mm', targetDate);
     let currentTime = dayStart;
-    while (isBefore(addMinutes(currentTime, serviceDuration), dayEnd) || isEqual(addMinutes(currentTime, serviceDuration), dayEnd)) {
-        const slotEnd = addMinutes(currentTime, serviceDuration);
-        const isBooked = bookedSlots.some(booked => 
-            (isBefore(currentTime, booked.end) && isBefore(booked.start, slotEnd))
-        );
-        if (!isBooked) {
-            availableSlots.push(format(currentTime, "HH:mm"));
-        }
-        currentTime = addMinutes(currentTime, 15); // Check every 15 minutes
+    while (isBefore(addMinutes(currentTime, service.duration), dayEnd) || isEqual(addMinutes(currentTime, service.duration), dayEnd)) {
+        const slotEnd = addMinutes(currentTime, service.duration);
+        const isBooked = bookedSlots.some(b => (isBefore(currentTime, b.end) && isBefore(b.start, slotEnd)));
+        if (!isBooked) availableSlots.push(format(currentTime, "HH:mm"));
+        currentTime = addMinutes(currentTime, 15);
     }
     return ok(c, availableSlots);
   });
+  app.get('/api/appointments', async (c) => ok(c, (await AppointmentEntity.list(c.env)).items));
   app.post('/api/appointments', zValidator('json', appointmentSchema), async (c) => {
     const { manicuristId, serviceId, startTime } = c.req.valid('json');
-    const serviceEntity = new ServiceEntity(c.env, serviceId);
-    if (!await serviceEntity.exists()) return notFound(c, 'Service not found');
-    const service = await serviceEntity.getState();
+    const service = await new ServiceEntity(c.env, serviceId).getState();
+    if (!service.id) return notFound(c, 'Service not found');
     const start = new Date(startTime);
-    const end = addMinutes(start, service.duration);
     const newAppointment = {
         id: crypto.randomUUID(),
-        clientId: 'mock-client-id', // Replace with actual client ID
+        clientId: 'mock-client-id',
         manicuristId,
         serviceId,
         startTime: start.toISOString(),
-        endTime: end.toISOString(),
+        endTime: addMinutes(start, service.duration).toISOString(),
         status: 'scheduled' as const,
     };
-    const created = await AppointmentEntity.create(c.env, newAppointment);
-    return ok(c, created);
+    return ok(c, await AppointmentEntity.create(c.env, newAppointment));
+  });
+  // CLIENTS
+  app.get('/api/clients', async (c) => ok(c, (await ClientEntity.list(c.env)).items));
+  // REWARDS
+  app.get('/api/rewards', async (c) => ok(c, (await RewardsProgramEntity.list(c.env)).items));
+  app.post('/api/rewards', zValidator('json', rewardsProgramSchema), async (c) => {
+    const data = c.req.valid('json');
+    const newProgram = { id: crypto.randomUUID(), manicuristId: 'mock-manicurist-id', ...data };
+    return ok(c, await RewardsProgramEntity.create(c.env, newProgram));
+  });
+  app.put('/api/rewards/:id', zValidator('json', rewardsProgramSchema), async (c) => {
+    const { id } = c.req.param();
+    const entity = new RewardsProgramEntity(c.env, id);
+    if (!(await entity.exists())) return notFound(c, 'Reward program not found');
+    return ok(c, await entity.mutate(current => ({ ...current, ...c.req.valid('json') })));
   });
 }

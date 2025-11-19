@@ -19,12 +19,9 @@ const rewardsFormSchema = z.object({
   name: z.string().min(2, {
     message: 'Program name must be at least 2 characters.',
   }),
-  targetAppointments: z.preprocess(
-    (val) => Number(val || 0),
-    z.number().int().positive({
-      message: 'Please enter a positive number of appointments.',
-    })
-  ),
+  targetAppointments: z.coerce.number().int().positive({
+    message: 'Please enter a positive number of appointments.',
+  }),
   rewardDescription: z.string().min(5, {
     message: 'Reward description must be at least 5 characters.',
   }),

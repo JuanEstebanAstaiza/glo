@@ -1,6 +1,6 @@
 import { IndexedEntity } from "./core-utils";
-import type { Service, Availability, Appointment } from "@shared/types";
-// SERVICE ENTITY: one DO instance per service
+import type { Service, Availability, Appointment, RewardsProgram, Client } from "@shared/types";
+// SERVICE ENTITY
 export class ServiceEntity extends IndexedEntity<Service> {
   static readonly entityName = "service";
   static readonly indexName = "services";
@@ -14,7 +14,7 @@ export class ServiceEntity extends IndexedEntity<Service> {
     currency: "USD",
   };
 }
-// AVAILABILITY ENTITY: one DO instance per day of the week for a manicurist
+// AVAILABILITY ENTITY
 export class AvailabilityEntity extends IndexedEntity<Availability> {
     static readonly entityName = "availability";
     static readonly indexName = "availabilities";
@@ -27,7 +27,7 @@ export class AvailabilityEntity extends IndexedEntity<Availability> {
         isEnabled: false,
     };
 }
-// APPOINTMENT ENTITY: one DO instance per appointment
+// APPOINTMENT ENTITY
 export class AppointmentEntity extends IndexedEntity<Appointment> {
     static readonly entityName = "appointment";
     static readonly indexName = "appointments";
@@ -40,4 +40,31 @@ export class AppointmentEntity extends IndexedEntity<Appointment> {
         endTime: "",
         status: "scheduled",
     };
+}
+// REWARDS PROGRAM ENTITY
+export class RewardsProgramEntity extends IndexedEntity<RewardsProgram> {
+    static readonly entityName = "rewards_program";
+    static readonly indexName = "rewards_programs";
+    static readonly initialState: RewardsProgram = {
+        id: "",
+        manicuristId: "",
+        name: "Loyalty Program",
+        targetAppointments: 10,
+        rewardDescription: "50% off next service",
+    };
+}
+// CLIENT ENTITY
+export class ClientEntity extends IndexedEntity<Client> {
+    static readonly entityName = "client";
+    static readonly indexName = "clients";
+    static readonly initialState: Client = {
+        id: "",
+        name: "",
+        email: "",
+        manicuristId: "",
+    };
+    static readonly seedData: ReadonlyArray<Client> = [
+        { id: 'mock-client-id', name: 'Jane Doe', email: 'jane.doe@example.com', manicuristId: 'mock-manicurist-id' },
+        { id: 'mock-client-id-2', name: 'John Smith', email: 'john.smith@example.com', manicuristId: 'mock-manicurist-id' },
+    ];
 }

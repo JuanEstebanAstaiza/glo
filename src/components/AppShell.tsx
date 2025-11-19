@@ -7,7 +7,7 @@ import {
   Users,
   Gift,
   Menu,
-  X,
+  BookUser,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -18,6 +18,7 @@ const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/services", icon: Scissors, label: "Services" },
   { to: "/schedule", icon: Calendar, label: "Schedule" },
+  { to: "/appointments", icon: BookUser, label: "Appointments" },
   { to: "/clients", icon: Users, label: "Clients" },
   { to: "/rewards", icon: Gift, label: "Rewards" },
 ];
