@@ -56,7 +56,7 @@
       }
     },
     "footer": {
-      "builtWith": "Built with ❤️ at Cloudflare"
+      "builtWith": "Built with ❤�� at Cloudflare"
     }
   },
   "services": {
@@ -85,5 +85,38 @@
     "loadError": "Failed to load services",
     "durationValue": "{{duration}} min",
     "openMenu": "Open menu"
+  },
+  "sidebar": {
+    "template": "Template",
+    "search": "Search",
+    "home": "Home",
+    "projects": "Projects",
+    "explore": "Explore",
+    "quickLinks": "Quick Links",
+    "starred": "Starred",
+    "support": "Support",
+    "settings": "Settings",
+    "footer": "A simple shadcn sidebar"
+  },
+  "schedule": {
+    "title": "My Schedule",
+    "editAvailability": "Edit Availability",
+    "editWeeklyAvailability": "Edit Weekly Availability",
+    "weeklyAvailability": "Weekly Availability",
+    "weeklyAvailabilityDescription": "Your standard weekly hours.",
+    "unavailable": "Unavailable",
+    "updateSuccess": "Availability updated successfully.",
+    "updateError": "Failed to update availability.",
+    "loadError": "Failed to load availability data.",
+    "loadingForm": "Loading form...",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
   }
 }

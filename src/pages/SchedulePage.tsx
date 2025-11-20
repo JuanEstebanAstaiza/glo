@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
@@ -16,6 +17,7 @@ const fetchAvailability = async (): Promise<Availability[]> => {
 };
 const daysOfWeek: Availability['dayOfWeek'][] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 export function SchedulePage() {
+  const { t } = useTranslation();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [isFormOpen, setFormOpen] = useState(false);
   const isMobile = useIsMobile();
@@ -29,10 +31,10 @@ export function SchedulePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['availability'] });
       setFormOpen(false);
-      toast.success('Availability updated successfully!');
+      toast.success(t('schedule.updateSuccess'));
     },
     onError: (err: Error) => {
-      toast.error(err.message || 'Failed to update availability.');
+      toast.error(err.message || t('schedule.updateError'));
     },
   });
   const handleFormSubmit = (values: Availability[]) => {
@@ -69,22 +71,22 @@ export function SchedulePage() {
       ));
     }
     if (error) {
-      return <p className="text-red-600 text-center">Failed to load availability.</p>;
+      return <p className="text-red-600 text-center">{t('schedule.loadError')}</p>;
     }
     return fullAvailability.map(day => (
       <div key={day.dayOfWeek} className="flex items-center justify-between">
-        <span className="text-sm font-medium text-brand-charcoal capitalize">{day.dayOfWeek}</span>
+        <span className="text-sm font-medium text-brand-charcoal capitalize">{t(`schedule.days.${day.dayOfWeek}`)}</span>
         {day.isEnabled ? (
           <span className="text-sm text-brand-charcoal font-semibold">{day.startTime} - {day.endTime}</span>
         ) : (
-          <span className="text-sm text-muted-foreground">Unavailable</span>
+          <span className="text-sm text-muted-foreground">{t('schedule.unavailable')}</span>
         )}
       </div>
     ));
   };
   const EditTrigger = (
     <Button className="bg-brand-charcoal hover:bg-brand-charcoal/90 text-white">
-      Edit Availability
+      {t('schedule.editAvailability')}
     </Button>
   );
   const FormDialog = isMobile ? Sheet : Dialog;
@@ -97,16 +99,16 @@ export function SchedulePage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 lg:py-12">
       <Toaster richColors />
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-brand-charcoal">My Schedule</h1>
+        <h1 className="text-3xl font-bold text-brand-charcoal">{t('schedule.title')}</h1>
         <FormDialog open={isFormOpen} onOpenChange={setFormOpen}>
           <FormDialogTrigger asChild>{EditTrigger}</FormDialogTrigger>
           <FormDialogContent className="bg-white" {...contentProps}>
             <FormDialogHeader>
-              <FormDialogTitle>Edit Weekly Availability</FormDialogTitle>
+              <FormDialogTitle>{t('schedule.editWeeklyAvailability')}</FormDialogTitle>
             </FormDialogHeader>
             <div className={isMobile ? "p-4 overflow-y-auto max-h-[70vh]" : "p-4"}>
               {isLoading ? (
-                <p>Loading form...</p>
+                <p>{t('schedule.loadingForm')}</p>
               ) : (
                 <AvailabilityForm
                   onSubmit={handleFormSubmit}
@@ -138,8 +140,8 @@ export function SchedulePage() {
         <div>
           <Card>
             <CardHeader>
-              <CardTitle>Weekly Availability</CardTitle>
-              <CardDescription>Your standard working hours.</CardDescription>
+              <CardTitle>{t('schedule.weeklyAvailability')}</CardTitle>
+              <CardDescription>{t('schedule.weeklyAvailabilityDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
