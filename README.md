@@ -1,6 +1,6 @@
 # Glo: The Artisan Nail Suite
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/JuanEstebanAstaiza/glo)
 
 Glo is a modern, visually stunning SaaS platform designed exclusively for manicurists. It empowers nail artisans to manage their entire business from a single, intuitive dashboard. The application is built with three primary user roles in mind: the Manicurist, their Client, and a Super Admin.
 
@@ -88,7 +88,7 @@ This command will deploy your application to Cloudflare Pages and publish your W
 
 Alternatively, you can deploy directly from your GitHub repository with a single click:
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/JuanEstebanAstaiza/glo)
 
 ## 📄 License
 
