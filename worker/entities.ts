@@ -13,9 +13,9 @@ export class ManicuristEntity extends IndexedEntity<Manicurist> {
         registrationDate: new Date().toISOString(),
     };
     static readonly seedData: ReadonlyArray<Manicurist> = [
-        { id: 'mock-manicurist-id', name: 'Alice Wonder', email: 'alice@example.com', status: 'active', registrationDate: '2023-10-01T10:00:00Z' },
-        { id: 'manicurist-2', name: 'Bella Ciao', email: 'bella@example.com', status: 'active', registrationDate: '2023-11-15T14:30:00Z' },
-        { id: 'manicurist-3', name: 'Carla Smith', email: 'carla@example.com', status: 'disabled', registrationDate: '2023-12-20T09:00:00Z' },
+        { id: 'mock-manicurist-id', name: 'Alice Wonder', email: 'alice@example.com', status: 'active', registrationDate: '2023-10-01T10:00:00Z', location: 'New York, NY' },
+        { id: 'manicurist-2', name: 'Bella Ciao', email: 'bella@example.com', status: 'active', registrationDate: '2023-11-15T14:30:00Z', location: 'Los Angeles, CA' },
+        { id: 'manicurist-3', name: 'Carla Smith', email: 'carla@example.com', status: 'disabled', registrationDate: '2023-12-20T09:00:00Z', location: 'Chicago, IL' },
     ];
 }
 // SERVICE ENTITY

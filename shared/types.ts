@@ -10,6 +10,7 @@ export interface Manicurist {
   email: string;
   status: 'active' | 'disabled';
   registrationDate: string; // ISO 8601 format
+  location?: string; // e.g., "New York, NY"
   clientCount?: number;
   totalRevenue?: number; // in cents
 }

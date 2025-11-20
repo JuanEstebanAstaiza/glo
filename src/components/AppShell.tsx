@@ -10,6 +10,7 @@ import {
   BookUser,
   LogOut,
   UserCircle,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -36,6 +37,7 @@ const manicuristNavItems = [
 ];
 const clientNavItems = [
   { to: "/client-dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/discover", icon: Search, label: "Discover" },
 ];
 const NavContent = ({ navItems }: { navItems: typeof manicuristNavItems }) => (
   <div className="flex flex-col h-full">
